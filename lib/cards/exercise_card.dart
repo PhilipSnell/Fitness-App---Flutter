@@ -37,7 +37,7 @@ Widget exerciseCard(dynamic item, BuildContext context){
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(15.0),
                           child: CachedNetworkImage(
-                            imageUrl:  "$baseUrl${item['image']}",
+                            imageUrl:  "${item['image']}",
                             placeholder: (context, url) => new LoadingIndicator(),
                             errorWidget: (context, url, error) => new Icon(Icons.error),
                           ),

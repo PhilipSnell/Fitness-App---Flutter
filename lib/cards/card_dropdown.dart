@@ -12,7 +12,6 @@ import 'package:xcell/pages/training/training_page.dart';
 import 'package:xcell/theme/style.dart';
 import 'package:xcell/popups/video_popup.dart';
 
-
 class CardDropDown extends StatefulWidget {
   final String reps;
   final String weight;
@@ -307,7 +306,6 @@ class _CardDropDownState extends State<CardDropDown> {
                 ),
               ),
             ),
-
           ],
         ),
       ),

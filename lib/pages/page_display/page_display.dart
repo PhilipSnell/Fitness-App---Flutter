@@ -6,11 +6,13 @@ import 'package:xcell/bloc/authentication_bloc.dart';
 import 'package:xcell/database/training_database.dart';
 import 'package:xcell/pages/exercises/exercise_page.dart';
 import 'package:xcell/pages/home/home_page.dart';
+import 'package:xcell/pages/logging/logging.dart';
 import 'package:xcell/pages/report/report_page.dart';
 import 'package:xcell/repository/user_repository.dart';
 import 'package:xcell/pages/settings/settings_page.dart';
 import 'package:xcell/pages/training/training_page.dart';
 import 'package:xcell/theme/style.dart';
+
 
 class MyPage extends StatefulWidget {
   @override
@@ -32,6 +34,7 @@ class _PageState extends State<MyPage> {
   List pageTitles = [
     "Home",
     "Training",
+    "Logging",
     "Exercises",
     "Report",
     "Settings",
@@ -43,7 +46,11 @@ class _PageState extends State<MyPage> {
     },
     {
       "icon": Icons.calendar_today,
-      "name": "Training Page",
+      "name": "Training Plan",
+    },
+    {
+      "icon": Icons.fact_check_outlined,
+      "name": "Logging",
     },
     {
       "icon": MaterialCommunityIcons.dumbbell,
@@ -169,7 +176,7 @@ class _PageState extends State<MyPage> {
                   itemBuilder: (BuildContext context, int index) {
                     Map item = drawerItems[index];
                     return Padding(
-                      padding: index == 4
+                      padding: index == 5
                           ? const EdgeInsets.fromLTRB(0,240, 0, 0)
                           : const EdgeInsets.fromLTRB(0,0, 0, 0),
                       child: ListTile(
@@ -238,12 +245,15 @@ class _PageState extends State<MyPage> {
           controller: _pageController,
           onPageChanged: onPageChanged,
           children: <Widget>[
-
+            LoggingPage(),
             homePage(),
             TrainPage(),
+
             exercisePage(),
             reportPage(),
             settingsPage(),
+
+
           ],
         ),
       ),

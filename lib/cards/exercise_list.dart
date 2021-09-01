@@ -12,14 +12,13 @@ import 'package:xcell/theme/style.dart';
 
 import 'exercise_card.dart';
 
-final String baseUrl = "https://xcellfitness.herokuapp.com";
 class ExerciseList extends StatefulWidget {
   @override
   _ExerciseListState createState() => new _ExerciseListState();
 }
 
 class _ExerciseListState extends State<ExerciseList> {
-  final String baseUrl = "https://xcellfitness.herokuapp.com";
+
   TextEditingController controller = new TextEditingController();
   final db = ExerciseDatabase.instance;
   List<dynamic> _list = [];

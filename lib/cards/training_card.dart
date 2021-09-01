@@ -112,7 +112,8 @@ class _TrainingCardState extends State<TrainingCard> {
                       }
                   ),
                 );
-              }else{
+              }
+              else{
                 return Center(child: CircularProgressIndicator());
               }
             }
@@ -180,10 +181,17 @@ class _TrainingCardState extends State<TrainingCard> {
                                                                       color:  cardBack,
                                                                       child: ClipRRect(
                                                                         borderRadius: BorderRadius.circular(15.0),
-                                                                        child: CachedNetworkImage(
-                                                                          imageUrl:  "$baseUrl${exercise.data["image"]}",
-                                                                          placeholder: (context, url) => new LoadingIndicator(),
-                                                                          errorWidget: (context, url, error) => new Icon(Icons.error),
+                                                                        child: Center(
+                                                                          child: new AspectRatio(
+                                                                          aspectRatio: 487 / 451,
+                                                                            child: new Container(
+                                                                              child: CachedNetworkImage(
+                                                                                                imageUrl:  "${exercise.data["image"]}",
+                                                                                                placeholder: (context, url) => new LoadingIndicator(),
+                                                                                                errorWidget: (context, url, error) => new Icon(Icons.error),
+                                                                                  ),
+                                                                            ),
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                     ),
@@ -315,7 +323,8 @@ class _TrainingCardState extends State<TrainingCard> {
                                                             );
                                                           }
                                                           else{
-                                                            return Center(child: CircularProgressIndicator());
+
+                                                             return Center(child: CircularProgressIndicator());
                                                           }
                                                         }
 

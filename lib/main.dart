@@ -62,6 +62,10 @@ class App extends StatelessWidget {
         accentColor: featureColor,
         focusColor: featureColor,
         scaffoldBackgroundColor: background,
+        textSelectionTheme: TextSelectionThemeData(
+          selectionHandleColor: Color(0x232323), //Set to see through
+        ),
+        // textSelectionHandleColor: Colors.green,
       ),
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
 
