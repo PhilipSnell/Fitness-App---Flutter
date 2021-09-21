@@ -53,3 +53,25 @@ class IntField {
     this.name,
   });
 }
+class TextValue {
+  int id;
+  DateTime date;
+  String value;
+
+  TextValue({
+    this.id,
+    this.date,
+    this.value,
+  });
+}
+class IntValue {
+  int id;
+  DateTime date;
+  int value;
+
+  IntValue({
+    this.id,
+    this.date,
+    this.value,
+  });
+}
