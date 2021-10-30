@@ -68,17 +68,17 @@ class _ExerciseListState extends State<ExerciseList> {
           new Expanded(
             child: _list.length != 0 || controller.text.isNotEmpty
                 ? new ListView.builder(
-              itemCount: _list.length,
-              itemBuilder: (context, index) {
-                return exerciseCard(_list[index], context);
-              },
-            )
+                        itemCount: _list.length,
+                        itemBuilder: (context, index) {
+                          return exerciseCard(_list[index], context);
+                        },
+                      )
                 : new ListView.builder(
-              itemCount: _exercises.length,
-              itemBuilder: (context, index) {
-                return exerciseCard(_exercises[index], context);
-              },
-            ),
+                        itemCount: _exercises.length,
+                        itemBuilder: (context, index) {
+                          return exerciseCard(_exercises[index], context);
+                        },
+                      ),
           ),
         ],
       ),

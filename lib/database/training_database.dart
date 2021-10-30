@@ -4,6 +4,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
+import 'package:xcell/models/training_entry.dart';
 final table = 'exercise';
 
 class DatabaseHelper {
@@ -20,6 +21,7 @@ class DatabaseHelper {
   static final columnWeight = 'weight';
   static final columnSets = 'sets';
   static final columnExerciseId = 'exercise';
+  static final columnComment = 'comment';
 
   // make this a singleton class
   DatabaseHelper._privateConstructor();
@@ -55,7 +57,8 @@ class DatabaseHelper {
             "$columnReps TEXT NOT NULL, "
             "$columnWeight TEXT NOT NULL, "
             "$columnSets INTEGER NOT NULL, "
-            "$columnExerciseId INTEGER NOT NULL "
+            "$columnExerciseId INTEGER NOT NULL, "
+            "$columnComment TEXT NOT NULL "
             ")"
     );
   }
@@ -77,10 +80,32 @@ class DatabaseHelper {
   }
   // All of the rows are returned as a list of maps, where each map is
   // a key-value list of columns.
-  Future<List<Map<String, dynamic>>> queryAllRows() async {
+  Future<List<TrainingEntry>> queryAllRows() async {
     Database db = await instance.database;
     List<Map<String, dynamic>> i = await db.query(table);
-    return i;
+    List<TrainingEntry> entrys =[];
+    TrainingEntry entry;
+    for (final item in i){
+
+      entry = TrainingEntry(
+        id: item["id"],
+        userId: item["user"],
+        phase: item["phase"],
+        week: item["week"],
+        day: item["day"],
+        reps: item["reps"],
+        weight: item["weight"],
+        sets: item["sets"],
+        exerciseId: item["exercise"],
+        comment: item["comment"],
+      );
+      print("Item: ");
+
+      entrys.add(entry);
+      print(entrys.length);
+    }
+
+    return entrys;
   }
   Future<List<Map<String, dynamic>>> queryDayRows(int day) async {
     Database db = await instance.database;

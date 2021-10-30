@@ -17,6 +17,7 @@ class TrainingEntry {
   String weight;
   int sets;
   int exerciseId;
+  String comment;
 
   TrainingEntry({
     this.id,
@@ -28,6 +29,7 @@ class TrainingEntry {
     this.weight,
     this.sets,
     this.exerciseId,
+    this.comment,
   });
 
   factory TrainingEntry.fromJson(Map<String, dynamic> json) => TrainingEntry(
@@ -40,6 +42,7 @@ class TrainingEntry {
     weight: json["weight"],
     sets: json["sets"],
     exerciseId: json["exercise"]["id"],
+    comment:json["comment"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -52,5 +55,6 @@ class TrainingEntry {
     "weight": weight,
     "sets": sets,
     "exercise": exerciseId,
+    "comment": comment,
   };
 }

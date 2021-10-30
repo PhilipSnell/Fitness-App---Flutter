@@ -14,8 +14,10 @@ import 'package:xcell/models/training_entry.dart';
 import 'package:xcell/models/exercise.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
-final _api = "/api";
-final _base = "https://xcellfitness.herokuapp.com";
+class APIglobs {
+  static var api = "/api";
+  static var base = "https://xcellfitness.herokuapp.com";
+}
 final _set = "/sets/";
 final _email = "/data/";
 final _exer = "/exercise/";
@@ -24,17 +26,16 @@ final _send = "/messages/";
 final _tokenEndpoint = "/api-token-auth/";
 final _register = "/register/";
 final _group = "/groups/";
+final _groupURL = APIglobs.base + APIglobs.api + _group;
+final _chatURL = APIglobs.base + APIglobs.api + _chat;
+final _setURL = APIglobs.base + APIglobs.api + _set;
+final _sendMessageURL = APIglobs.base + APIglobs.api + _send;
+final _emailURL = APIglobs.base + APIglobs.api + _email;
+final _exerURL = APIglobs.base + APIglobs.api + _exer;
+final _tokenURL = APIglobs.base + APIglobs.api + _tokenEndpoint;
+final _registerURL = APIglobs.base + APIglobs.api + _register;
 
-final _groupURL = _base + _api + _group;
-final _chatURL = _base + _api + _chat;
-final _setURL = _base + _api + _set;
-final _sendMessageURL = _base + _api + _send;
-final _emailURL = _base + _api + _email;
-final _exerURL = _base + _api + _exer;
-final _tokenURL = _base + _api + _tokenEndpoint;
-final _registerURL = _base + _api + _register;
-
-final defaultImage = _base + "/media/images/pullup_wbq2Kcf.png";
+final defaultImage = APIglobs.base + "/media/images/pullup_wbq2Kcf.png";
 final utubeThumbnailBase = "https://i3.ytimg.com/vi/";
 
 void sendMessage(types.TextMessage textMessage) async {
@@ -105,52 +106,7 @@ Future<List<types.TextMessage>> getChatData() async {
   return messages;
 }
 
-Future<List> getGroupData() async {
 
-  print(_groupURL);
-  String email = await UserRepository().getUsername();
-  var request = {};
-  print("---------------------------------------");
-  print(email);
-  request["username"] = email;
-  String post = json.encode(request);
-
-  print(post);
-  final http.Response response = await http.post(
-    _groupURL,
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: post,
-  );
-  List<Group> groups = [];
-  for (final entry in json.decode(response.body) ){
-    List<TextField> textfields = [];
-    for (final field in entry["textfields"]){
-      TextField textfield = TextField(
-        id: field["id"],
-        name: field["name"],
-      );
-      textfields.add(textfield);
-    }
-    List<IntField> intfields = [];
-    for (final field in entry["intfields"]){
-      IntField intfield = IntField(
-        id: field["id"],
-        name: field["name"],
-      );
-      intfields.add(intfield);
-    }
-    Group group = Group(
-      id: entry["id"],
-      name: entry["name"],
-      textfields: textfields,
-      intfields: intfields
-    );
-    groups.add(group);
-  }
-  return groups;
-}
 
 
 class trainingApiProvider {
@@ -160,6 +116,7 @@ class trainingApiProvider {
 
     print(_emailURL);
     String email = await UserRepository().getUsername();
+    email = email.replaceAll(' ','');
     var request = {};
     print("---------------------------------------");
     print(email);
@@ -173,22 +130,20 @@ class trainingApiProvider {
       },
       body: post,
     );
+    // await DatabaseHelper.deleteDB();
     for(final entry in json.decode(response.body)){
-        TrainingEntry item = TrainingEntry.fromJson(entry);
-        Map<String, dynamic> entry1 = item.toJson();
+      TrainingEntry item = TrainingEntry.fromJson(entry);
+      Map<String, dynamic> entry1 = item.toJson();
 
-        print('inserting $entry1');
-        //int id = entry1["id"];
-        //await db.deleteAll();
-        //await DatabaseHelper.deleteDB();
+      print('inserting $entry1');
 
-        var result = await db.insert(entry1);
-        if(result==null){
-          print("Entry already existed");
-        }
-        else{
-          print("Successfully added $entry1");
-        }
+      var result = await db.insert(entry1);
+      if(result==null){
+        print("Entry already existed");
+      }
+      else{
+        print("Successfully added $entry1");
+      }
     }
   }
   void getExerciseData() async {
@@ -216,7 +171,7 @@ class trainingApiProvider {
         try {
           int len =entry["video"].toString().length;
           String utubeID = entry["video"].substring(len-11, len);
-          entry["image"] = utubeThumbnailBase + utubeID + "/maxresdefault.jpg";
+          entry["image"] = utubeThumbnailBase + utubeID + "/default.jpg";
 
         }
         catch(e){
@@ -225,7 +180,7 @@ class trainingApiProvider {
 
       }
       else{
-        entry["image"] = _base + entry["image"];
+        entry["image"] = APIglobs.base + entry["image"];
       }
       Exercise exer = Exercise.fromJson(entry);
       Map<String, dynamic> entry2 = exer.toJson();

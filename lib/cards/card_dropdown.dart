@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:xcell/api_connection/set_feedback.dart';
 import 'package:xcell/common/common.dart';
 import 'package:xcell/database/exercise_database.dart';
 import 'package:xcell/database/set_database.dart';
@@ -11,6 +12,7 @@ import 'package:xcell/models/training_set.dart';
 import 'package:xcell/pages/training/training_page.dart';
 import 'package:xcell/theme/style.dart';
 import 'package:xcell/popups/video_popup.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 class CardDropDown extends StatefulWidget {
   final String reps;
@@ -19,6 +21,7 @@ class CardDropDown extends StatefulWidget {
   final int e_id;
   final bool display;
   final Function(bool) setSubmitAllowed;
+  final int difficulty;
 
   const CardDropDown({
     Key key,
@@ -28,6 +31,7 @@ class CardDropDown extends StatefulWidget {
     this.t_id,
     this.e_id,
     this.setSubmitAllowed,
+    this.difficulty,
   }) : super(key: key);
 
   @override
@@ -36,10 +40,10 @@ class CardDropDown extends StatefulWidget {
 
 class _CardDropDownState extends State<CardDropDown> {
   // need to load the itemList from db
+
+  int difficulty;
   final set_db = SetDatabase.instance;
   final db = ExerciseDatabase.instance;
-
-  TrainingSet defaultSet ;
 
   //Map<String, String> reps = {};
 
@@ -78,18 +82,18 @@ class _CardDropDownState extends State<CardDropDown> {
       print("Removing last set");
       loadList();
     }else {
+
+      //combining reps and weights into one string separating each item with comma
       for (TrainingSet item in list) {
         reps = "$reps${item.reps},";
         weights = "$weights${item.weights},";
       }
+      //remove comma from end of string
       if (reps != null && reps.length > 0) {
         reps = reps.substring(0, reps.length - 1);
         weights = weights.substring(0, weights.length - 1);
       }
-      // List<String> result = reps.split(',');
-      // print("String length: ${result}");
-      //Map<String, dynamic> row = ;
-      //print("This is ID: ${itemList[0].id}");
+
       row = {
         't_id': list[0].t_id,
         'sets': list.length,
@@ -111,18 +115,17 @@ class _CardDropDownState extends State<CardDropDown> {
     setState(() {
       print("save completed");
     });
-    //loadList();
   }
 
   @override
   void initState() {
-
     super.initState();
-    defaultSet = TrainingSet(t_id: widget.t_id, sets: 1, reps: widget.reps, weights: widget.weight, e_id: widget.e_id);
+
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Visibility(
       visible: widget.display,
       child: Container(
@@ -135,11 +138,13 @@ class _CardDropDownState extends State<CardDropDown> {
               return Column(
                 //mainAxisSize: MainAxisSize.min,
                 children: [
+
                   ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: listOfSets.data.length,
                       itemBuilder: (BuildContext context, int index) {
+
                         return TrainSet(listOfSets.data,index);
                       }
                   ),
@@ -164,6 +169,81 @@ class _CardDropDownState extends State<CardDropDown> {
                             }
                         ),
                       ),
+                      Visibility(
+                        visible: listOfSets.data.length > 0 ? true : false,
+                        child: InkWell(
+                            onTap: (){
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: Text("Select Exercise Difficulty"),
+                                  content: Center(
+                                    child: DropdownButton<int>(
+                                      focusColor:Colors.white,
+                                      value: difficulty==null
+                                          ? widget.difficulty
+                                          : difficulty,
+                                      //elevation: 5,
+                                      style: TextStyle(color: Colors.white),
+                                      iconEnabledColor:Colors.black,
+                                      items: <int>[
+                                        1,
+                                        2,
+                                        3,
+                                        4,
+                                        5,
+                                        6,
+                                        7,
+                                        8,
+                                        9,
+                                        10
+                                      ].map<DropdownMenuItem<int>>((int value) {
+                                        return DropdownMenuItem<int>(
+                                          value: value,
+                                          child: Text("$value",style:TextStyle(color:Colors.black),),
+                                        );
+                                      }).toList(),
+                                      hint:Text(
+                                        "#",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      onChanged: (int value) {
+                                        
+                                        setState(() {
+                                          difficulty = value;
+                                          SetDifficulty(widget.t_id, value);
+                                        });
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              margin: EdgeInsets.fromLTRB(15, 0, 15, 2),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(5.0),
+                                child: Container(
+                                  height: 24,
+                                  width: 24,
+
+                                  decoration: BoxDecoration(
+                                    color: cardBack,
+                                  ),
+                                  child: Center(
+                                    child: widget.difficulty != null
+                                        ? Text("${widget.difficulty}")
+                                        :Text("#"),
+                                  ),
+                                ),
+                              ),
+                            )
+                        ),
+                      ),
                       IconButton(
                           icon: Icon(
                             Icons.add,
@@ -172,7 +252,7 @@ class _CardDropDownState extends State<CardDropDown> {
                           padding: listOfSets.data.length > 0 ? EdgeInsets.only(left: 15) : EdgeInsets.zero,
                           constraints: BoxConstraints(),
                           onPressed: () {
-                            listOfSets.data.add(defaultSet);
+                            listOfSets.data.add(TrainingSet(t_id: widget.t_id, sets: 1, reps: widget.reps, weights: widget.weight, e_id: widget.e_id));
                             saveList(listOfSets.data);
                             widget.setSubmitAllowed(true);
                           }
@@ -191,12 +271,11 @@ class _CardDropDownState extends State<CardDropDown> {
   }
 
   Widget TrainSet(List<TrainingSet> list, int index) {
-    //TextEditingController _repsController = TextEditingController().text;
 
     if (index ==list.length){
-      list.add(defaultSet);
+      list.add(TrainingSet(t_id: widget.t_id, sets: 1, reps: widget.reps, weights: widget.weight, e_id: widget.e_id));
     }
-    print(list[index].reps);
+
     TrainingSet item = list[index];
 
     return Container(
@@ -243,7 +322,7 @@ class _CardDropDownState extends State<CardDropDown> {
                     ),
                     Container(
                       height: 27,
-                      width: 50,
+                      width: 70,
                       color: background,
                       child: Padding(
                         padding: EdgeInsets.only(left: 5, right: 5),
@@ -285,19 +364,25 @@ class _CardDropDownState extends State<CardDropDown> {
                     ),
                     Container(
                       height: 27,
-                      width: 50,
+                      width: 70,
                       color: background,
                       child: Padding(
                         padding: EdgeInsets.only(left: 5, right: 5),
                         child: Center(
                           child: TextFormField(
+
+                            maxLines: 1,
                             decoration: new InputDecoration(
+                              isDense: true,
                               enabledBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.fromLTRB(5.0, 1.0, 5.0, 1.0),
                             ),
                             initialValue: item.weights,
                             onChanged: (text) {
+                              // _weightController.text = text;
                               takeWeight(text, index, list);
                             },
+
                           ),
                         ),
                       ),
