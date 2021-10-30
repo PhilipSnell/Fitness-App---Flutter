@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xcell/pages/page_display/page_display.dart';
@@ -33,6 +33,7 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 
 void main() {
+  initializeDateFormatting('fr_FR', null);
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final userRepository = UserRepository();
 

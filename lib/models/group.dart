@@ -10,13 +10,11 @@ class Group{
   int id;
   String name;
   List<TextField> textfields;
-  List intfields;
 
   Group({
     this.id,
     this.name,
     this.textfields,
-    this.intfields,
   });
 
   factory Group.fromJson(Map<String, dynamic> json){
@@ -24,7 +22,6 @@ class Group{
       id: json['id'],
       name: json['name'],
       textfields: json['textfields'],
-      intfields: json['intfields'],
 
     );
   }
@@ -32,27 +29,20 @@ class Group{
     "id": id,
     "name": name,
     "textfields": textfields,
-    "intfields": textfields,
   };
 }
 class TextField {
   int id;
   String name;
+  bool type;
 
   TextField({
     this.id,
     this.name,
+    this.type
   });
 }
-class IntField {
-  int id;
-  String name;
 
-  IntField({
-    this.id,
-    this.name,
-  });
-}
 class TextValue {
   int id;
   DateTime date;
@@ -63,15 +53,10 @@ class TextValue {
     this.date,
     this.value,
   });
-}
-class IntValue {
-  int id;
-  DateTime date;
-  int value;
 
-  IntValue({
-    this.id,
-    this.date,
-    this.value,
-  });
+  Map<String, dynamic> toJson() => {
+    "field_id": id,
+    "date": date.toString().substring(0,10),
+    "value": value,
+  };
 }

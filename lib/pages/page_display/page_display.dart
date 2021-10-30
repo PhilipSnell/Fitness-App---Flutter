@@ -8,6 +8,7 @@ import 'package:xcell/pages/exercises/exercise_page.dart';
 import 'package:xcell/pages/home/home_page.dart';
 import 'package:xcell/pages/logging/logging.dart';
 import 'package:xcell/pages/report/report_page.dart';
+import 'package:xcell/pages/training/training_page1.dart';
 import 'package:xcell/repository/user_repository.dart';
 import 'package:xcell/pages/settings/settings_page.dart';
 import 'package:xcell/pages/training/training_page.dart';
@@ -246,7 +247,7 @@ class _PageState extends State<MyPage> {
           onPageChanged: onPageChanged,
           children: <Widget>[
             LoggingPage(),
-            homePage(),
+            TrainingPage1(),
             TrainPage(),
 
             exercisePage(),

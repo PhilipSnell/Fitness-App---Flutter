@@ -31,12 +31,11 @@ class _TrainingCardState extends State<TrainingCard> {
     return t_db.getDays();
   }
   Future<List<dynamic>> loadData() async{
-    var _training = t_db.queryDayRows(selectedDay+1);
-    trainingApiProvider().getTrainingData();
 
+    trainingApiProvider().getTrainingData();
+    var _training = t_db.queryDayRows(selectedDay+1);
     setState(() {
       print("refreshing");
-
     });
     return _training;
   }
@@ -58,6 +57,9 @@ class _TrainingCardState extends State<TrainingCard> {
           Container(
             height: 7,
           ),
+          // -------------------------------------------------------------------------
+          // Day Selector
+          // -------------------------------------------------------------------------
           FutureBuilder<int>(
             future:  _getDays(),
             builder: (context, days) {
@@ -118,6 +120,11 @@ class _TrainingCardState extends State<TrainingCard> {
               }
             }
           ),
+
+          //--------------------------------------------------------------------
+          //Exercise cards
+          //--------------------------------------------------------------------
+
           Expanded(
             child: Container(
 
