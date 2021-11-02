@@ -33,38 +33,39 @@ class _PageState extends State<MyPage> {
     return db.getLatest();
   }
   List pageTitles = [
-    "Home",
-    "Training",
+    // "Home",
     "Logging",
+    "Training",
     "Exercises",
-    "Report",
-    "Settings",
+    // "Report",
+    // "Settings",
   ];
   List drawerItems = [
+    // {
+    //   "icon": Icons.home,
+    //   "name": "Home Page",
+    // },
+
     {
-      "icon": Icons.home,
-      "name": "Home Page",
+      "icon": Icons.fact_check_outlined,
+      "name": "Logging",
     },
     {
       "icon": Icons.calendar_today,
       "name": "Training Plan",
     },
     {
-      "icon": Icons.fact_check_outlined,
-      "name": "Logging",
-    },
-    {
       "icon": MaterialCommunityIcons.dumbbell,
       "name": "Exercises",
     },
-    {
-      "icon": Icons.stacked_bar_chart,
-      "name": "Report",
-    },
-    {
-      "icon": Icons.settings,
-      "name": "Settings",
-    },
+    // {
+    //   "icon": Icons.stacked_bar_chart,
+    //   "name": "Report",
+    // },
+    // {
+    //   "icon": Icons.settings,
+    //   "name": "Settings",
+    // },
   ];
 
   @override
@@ -248,11 +249,11 @@ class _PageState extends State<MyPage> {
           children: <Widget>[
             LoggingPage(),
             TrainingPage1(),
-            TrainPage(),
+            // TrainPage(),
 
             exercisePage(),
-            reportPage(),
-            settingsPage(),
+            // reportPage(),
+            // settingsPage(),
 
 
           ],
