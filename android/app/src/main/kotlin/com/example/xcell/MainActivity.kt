@@ -1,4 +1,4 @@
-package com.example.xcell
+package com.ptapp.xcell
 
 import io.flutter.embedding.android.FlutterActivity
 

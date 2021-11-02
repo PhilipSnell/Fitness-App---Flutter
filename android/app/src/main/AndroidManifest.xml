@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.xcell">
+    package="com.ptapp.xcell">
    <application
         android:label="xcell"
         android:icon="@mipmap/ic_launcher">
