@@ -59,9 +59,12 @@ workflows:
 
         notify:
           success: true     # To receive a notification when a build succeeds
-          failure: false    # To not receive a notification when a build fails
+          failure: true    # To not receive a notification when a build fails
 
       app_store_connect:   # https://docs.codemagic.io/publishing-yaml/distribution
-        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
-        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        api_key: Encrypted(Z0FBQUFBQmhnYmZoNzBjTFAtNTM0LWI0dGF6dTM2ZmdmSTA5UnpCTXBFeXNKYzNCZmRxM0xZT3cxa3I5bnRrcTZKSjUwZU5JSGtBNk1ZUkY4aDB3NWlGejk2UzFaNER4anQ0bmVEcmJqWlR2SnlWWVB5ZUx4TlYzck1TazJPaWY4alVSSktvUnV5S21UcllnZEhXN1h2ejZJUTYwLW1SWGp4TURiMUpvVGhYT1Zoei1zQi02NTAxVzlaMTJpOUhLblFuUVptMHgxOXJHLU1RLVV3dktJc0x1ZndpcVhIRnhPR01MZXdVOXFfV0t6eTRzaFN2cWNPazNqOVNDcXU5TGVZQmIwVUV0QmhJQ2hPSjRJNXhUcWo4MDRvd2RZZkxuOWpiZnJEcl9lM2FmMHNnanFqYjE2ZmdHWWxDY3ZKelFXVklBQ0hHOTRNaHRXTWplbmpfZXhVN25fZTVCRTZYdnpoQ0FWRGg5OUs5MVM3WDlEVFE2WUVMQUJBbThLRGNTN3Q0TGJMZmE3c2JuVjA0NjdUaWJjQjcwakJTeXdabWlyX3Eya1YyQWJqMFA2X3JveHdpTzNNTT0=)
+        key_id: Z963JRMC83
+        issuer_id: 22cf2e9e-300f-4fcf-9e67-f5a8f5ad056b
+        submit_to_testflight: true # Optional boolean, defaults to false. Whether or not to submit the uploaded build to TestFlight beta review. Required for distributing to beta groups. Note: This action is performed during post-processing.
+        beta_groups: # Specify the names of beta tester groups that will get access to the build once it has passed beta review.
+          - Testing App
