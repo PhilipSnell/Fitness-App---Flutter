@@ -213,43 +213,41 @@ class _TrainingPage1State extends State<TrainingPage1> {
                                 topLeft: Radius.circular(20),
                                 topRight: Radius.circular(20),
                               ),
-                              child: Expanded(
-                                child: Container(
-                                  color: cardDropDown,
-                                  // height: 110,
-                                  child: Column(
-                                    children: [
-                                      InkWell(
-                                        onTap: (){
-                                          setState(() {
-                                            _display[index] = !_display[index];
-                                          });
+                              child: Container(
+                                color: cardDropDown,
+                                // height: 110,
+                                child: Column(
+                                  children: [
+                                    InkWell(
+                                      onTap: (){
+                                        setState(() {
+                                          _display[index] = !_display[index];
+                                        });
 
-                                        },
-                                        child: TrainingCard1(
-                                          exercise: _list[index].exerciseId,
-                                          reps: _list[index].reps,
-                                          weight: _list[index].weight,
-                                          sets:_list[index].sets,
-                                          id:_list[index].id,
-                                          comment:_list[index].comment,
-                                        ),
-                                      ),
-                                      CardDropDown(
-                                        display: _display[index],
+                                      },
+                                      child: TrainingCard1(
+                                        exercise: _list[index].exerciseId,
                                         reps: _list[index].reps,
                                         weight: _list[index].weight,
-                                        t_id:_list[index].id,
-                                        e_id:_list[index].exerciseId,
-                                        difficulty: _difficultyValues[index],
-                                        setSubmitAllowed:(bool value){
-                                          setState(() {
-                                            submit_allowed = value;
-                                          });
-                                        },
+                                        sets:_list[index].sets,
+                                        id:_list[index].id,
+                                        comment:_list[index].comment,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    CardDropDown(
+                                      display: _display[index],
+                                      reps: _list[index].reps,
+                                      weight: _list[index].weight,
+                                      t_id:_list[index].id,
+                                      e_id:_list[index].exerciseId,
+                                      difficulty: _difficultyValues[index],
+                                      setSubmitAllowed:(bool value){
+                                        setState(() {
+                                          submit_allowed = value;
+                                        });
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),

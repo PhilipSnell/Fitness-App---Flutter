@@ -76,40 +76,38 @@ class _PageState extends State<MyPage> {
         backgroundColor: background,
         title: Container(
           color: background,
-          child: _page == 1 ?Expanded(
-            child: Column(
-              children: <Widget>[
-                FutureBuilder<List<int>>(
-                  future: _getPhase(),
-                  builder: (BuildContext context, AsyncSnapshot<List <int>> snapshot) {
-                    List<Widget> children;
-                    if (snapshot.hasData) {
-                      //print("number of days : $_day");
-                      children = <Widget>[
-                        Text('${pageTitles[_page]} : ',
-                          style: TextStyle(fontSize: 22),
-                        ),
-                        Text('Phase ${snapshot.data[0]}: ',
-                          style: TextStyle(fontSize: 22),
-                        ),
-                        Text('Week ${snapshot.data[1]}',
-                          style: TextStyle(fontSize: 22),
-                        ),
-                      ];
-                    }else{
-                      return Center(child: CircularProgressIndicator());
-                    }
-                    return Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: children,
+          child: _page == 1 ?Column(
+            children: <Widget>[
+              FutureBuilder<List<int>>(
+                future: _getPhase(),
+                builder: (BuildContext context, AsyncSnapshot<List <int>> snapshot) {
+                  List<Widget> children;
+                  if (snapshot.hasData) {
+                    //print("number of days : $_day");
+                    children = <Widget>[
+                      Text('${pageTitles[_page]} : ',
+                        style: TextStyle(fontSize: 22),
                       ),
-                    );
-                  },
-                )
-              ],
-            ),
+                      Text('Phase ${snapshot.data[0]}: ',
+                        style: TextStyle(fontSize: 22),
+                      ),
+                      Text('Week ${snapshot.data[1]}',
+                        style: TextStyle(fontSize: 22),
+                      ),
+                    ];
+                  }else{
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  return Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: children,
+                    ),
+                  );
+                },
+              )
+            ],
           ):
               Text(pageTitles[_page]),
         ),
@@ -126,18 +124,19 @@ class _PageState extends State<MyPage> {
               Container(
                 height: 220,
                 child: DrawerHeader(
-                  child: Expanded(
-                    child: Column(
-                      children: <Widget>[
-                        Align(
-                          child: IconButton(icon: Icon(Entypo.cross, color: featureColor), alignment: Alignment.centerLeft, onPressed:() => Navigator.pop(context)),
-                          alignment: Alignment.centerLeft,
-                        ),
-                        Icon(Icons.person_pin_rounded,
-
+                  child: Column(
+                    children: <Widget>[
+                      Align(
+                        child: IconButton(icon: Icon(Entypo.cross, color: featureColor), alignment: Alignment.centerLeft, onPressed:() => Navigator.pop(context)),
+                        alignment: Alignment.centerLeft,
+                      ),
+                      Expanded(
+                        child: Icon(Icons.person_pin_rounded,
                             size: 100
                         ),
-                        DefaultTextStyle(
+                      ),
+                      Expanded(
+                        child: DefaultTextStyle(
                             style: TextStyle(fontSize: 16),
                             textAlign: TextAlign.center,
                             child: FutureBuilder<String>(
@@ -154,19 +153,17 @@ class _PageState extends State<MyPage> {
                                   ];
                                 }
                                 return Center(
-                                  child: Expanded(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: children,
-                                    ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: children,
                                   ),
                                 );
                               },
                             )
-                        )
-                      ],
-                    ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),
