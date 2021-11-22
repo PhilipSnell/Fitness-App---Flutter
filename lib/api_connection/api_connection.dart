@@ -36,7 +36,7 @@ final _tokenURL = APIglobs.base + APIglobs.api + _tokenEndpoint;
 final _registerURL = APIglobs.base + APIglobs.api + _register;
 
 final defaultImage = APIglobs.base + "/media/images/pullup_wbq2Kcf.png";
-final utubeThumbnailBase = "https://i3.ytimg.com/vi/";
+  final utubeThumbnailBase = "https://i3.ytimg.com/vi/";
 
 void sendMessage(types.TextMessage textMessage) async {
 
@@ -130,7 +130,7 @@ class trainingApiProvider {
       },
       body: post,
     );
-    // await DatabaseHelper.deleteDB();
+    await DatabaseHelper.deleteAll();
     for(final entry in json.decode(response.body)){
       TrainingEntry item = TrainingEntry.fromJson(entry);
       Map<String, dynamic> entry1 = item.toJson();

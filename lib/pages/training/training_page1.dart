@@ -121,6 +121,7 @@ class _TrainingPage1State extends State<TrainingPage1> {
 
   @override
   Widget build(BuildContext context) {
+    _useDifficultyFeedback();
     return new Scaffold(
       body: new Column(
         children: <Widget>[

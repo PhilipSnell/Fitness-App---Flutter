@@ -173,7 +173,7 @@ class DatabaseHelper {
     return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
   }
 
-  Future<int> deleteAll() async {
+  static Future<int> deleteAll() async {
     Database db = await instance.database;
     return await db.delete(table);
   }
