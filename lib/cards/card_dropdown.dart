@@ -21,9 +21,9 @@ class CardDropDown extends StatefulWidget {
   final int e_id;
   final bool display;
   final Function(bool) setSubmitAllowed;
-  final int difficulty;
+  int difficulty;
 
-  const CardDropDown({
+  CardDropDown({
     Key key,
     this.display,
     this.reps,
@@ -40,7 +40,6 @@ class CardDropDown extends StatefulWidget {
 
 class _CardDropDownState extends State<CardDropDown> {
   // need to load the itemList from db
-
   int difficulty;
   final set_db = SetDatabase.instance;
   final db = ExerciseDatabase.instance;
@@ -70,6 +69,7 @@ class _CardDropDownState extends State<CardDropDown> {
     // Map<String, dynamic> item;
     // SetDatabase.deleteDB();
     var sets = set_db.queryID(widget.t_id, widget.reps, widget.weight, widget.e_id,);
+    difficulty = widget.difficulty;
     return sets;
   }
 
@@ -176,50 +176,52 @@ class _CardDropDownState extends State<CardDropDown> {
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) => AlertDialog(
-                                  title: Text("Select Exercise Difficulty"),
-                                  content: Center(
-                                    child: DropdownButton<int>(
-                                      focusColor:Colors.white,
-                                      value: difficulty==null
-                                          ? widget.difficulty
-                                          : difficulty,
-                                      //elevation: 5,
-                                      style: TextStyle(color: Colors.white),
-                                      iconEnabledColor:Colors.black,
-                                      items: <int>[
-                                        1,
-                                        2,
-                                        3,
-                                        4,
-                                        5,
-                                        6,
-                                        7,
-                                        8,
-                                        9,
-                                        10
-                                      ].map<DropdownMenuItem<int>>((int value) {
-                                        return DropdownMenuItem<int>(
-                                          value: value,
-                                          child: Text("$value",style:TextStyle(color:Colors.black),),
-                                        );
-                                      }).toList(),
-                                      hint:Text(
-                                        "#",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500),
+                                    title: Text("Select Exercise Difficulty"),
+                                    content: Container(
+                                      height: 100,
+                                      child: Center(
+                                        child: DropdownButton<int>(
+                                          focusColor:Colors.white,
+                                          value: difficulty,
+                                          //elevation: 5,
+                                          style: TextStyle(color: Colors.white,),
+                                          iconEnabledColor:Colors.white,
+                                          items: <int>[
+                                            1,
+                                            2,
+                                            3,
+                                            4,
+                                            5,
+                                            6,
+                                            7,
+                                            8,
+                                            9,
+                                            10
+                                          ].map<DropdownMenuItem<int>>((int value) {
+                                            return DropdownMenuItem<int>(
+                                              value: value,
+                                              child: Text("$value",style:TextStyle(color:Colors.white),),
+                                            );
+                                          }).toList(),
+                                          hint:Text(
+                                            "#",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          onChanged: (int value) {
+
+                                            setState(() {
+                                              difficulty = value;
+                                              widget.difficulty = value;
+                                            });
+                                            SetDifficulty(widget.t_id, value);
+                                            Navigator.pop(context);
+                                          },
+                                        ),
                                       ),
-                                      onChanged: (int value) {
-                                        
-                                        setState(() {
-                                          difficulty = value;
-                                          SetDifficulty(widget.t_id, value);
-                                        });
-                                        Navigator.pop(context);
-                                      },
                                     ),
-                                  ),
                                 ),
                               );
                             },
@@ -228,16 +230,38 @@ class _CardDropDownState extends State<CardDropDown> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(5.0),
                                 child: Container(
-                                  height: 24,
-                                  width: 24,
+                                  height: 30,
+                                  width: 40,
+                                  child: Stack(
+                                      children:[
+                                        Container(
+                                            height: 30,
+                                            width: 40,
+                                            color: botRightDif,
+                                            child: Padding(
+                                              padding: const EdgeInsets.fromLTRB(0,14,3,0),
+                                              child: Text("10",
+                                              textAlign: TextAlign.right,
+                                              ),
+                                            ),
+                                        ),
+                                        ClipPath(
+                                          child: Container(
+                                            height: 30,
+                                            padding: const EdgeInsets.fromLTRB(3,3,0,0),
+                                            width: MediaQuery.of(context).size.width,
+                                            color: topLeftDif,
+                                            child: difficulty == null
+                                                  ?Text("#")
+                                                  :Text("${difficulty}"),
 
-                                  decoration: BoxDecoration(
-                                    color: cardBack,
-                                  ),
-                                  child: Center(
-                                    child: widget.difficulty != null
-                                        ? Text("${widget.difficulty}")
-                                        :Text("#"),
+                                            // child: difficulty != null
+                                            //     ? Text("${difficulty}")
+                                            //     :Text("#"),
+                                          ),
+                                          clipper: CustomClipPath(),
+                                        )
+                                      ]
                                   ),
                                 ),
                               ),
@@ -328,8 +352,11 @@ class _CardDropDownState extends State<CardDropDown> {
                         padding: EdgeInsets.only(left: 5, right: 5),
                         child: Center(
                           child: TextFormField(
+                            maxLines: 1,
                             decoration: new InputDecoration(
+                              isDense: true,
                               enabledBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.fromLTRB(5.0, 1.0, 5.0, 1.0),
                             ),
                             initialValue: item.reps,
                             onChanged: (text) {
@@ -398,6 +425,19 @@ class _CardDropDownState extends State<CardDropDown> {
   }
 }
 
+class CustomClipPath extends CustomClipper<Path> {
+  var radius=10.0;
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+    path.lineTo(0, 0);
+    path.lineTo(0,40);
+    path.lineTo(30,0);
 
+    return path;
+  }
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
 
 

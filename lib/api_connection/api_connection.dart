@@ -40,7 +40,7 @@ final defaultImage = APIglobs.base + "/media/images/pullup_wbq2Kcf.png";
 
 void sendMessage(types.TextMessage textMessage) async {
 
-  print(_sendMessageURL);
+  // print(_sendMessageURL);
   // String email = await UserRepository().getUsername();
 
   // print("---------------------------------------");
@@ -53,10 +53,10 @@ void sendMessage(types.TextMessage textMessage) async {
   timestamp = timestamp.replaceAll(" ","T");
   timestamp = "${timestamp}000Z";
   request["timestamp"] = timestamp;
-  print(request);
+  // print(request);
   String post = json.encode(request);
 
-  print(post);
+  // print(post);
   final http.Response response = await http.post(
     _sendMessageURL,
     headers: <String, String>{
@@ -64,20 +64,20 @@ void sendMessage(types.TextMessage textMessage) async {
     },
     body: post,
   );
-  print(response.body);
+  // print(response.body);
 }
 
 Future<List<types.TextMessage>> getChatData() async {
 
-  print(_chatURL);
+  // print(_chatURL);
   String email = await UserRepository().getUsername();
   var request = {};
-  print("---------------------------------------");
-  print(email);
+  // print("---------------------------------------");
+  // print(email);
   request["username"] = email;
   String post = json.encode(request);
 
-  print(post);
+  // print(post);
   final http.Response response = await http.post(
     _chatURL,
     headers: <String, String>{
@@ -114,15 +114,15 @@ class trainingApiProvider {
   final e_db = ExerciseDatabase.instance;
   void getTrainingData() async {
 
-    print(_emailURL);
+    // print(_emailURL);
     String email = await UserRepository().getUsername();
     email = email.replaceAll(' ','');
     var request = {};
-    print("---------------------------------------");
-    print(email);
+    // print("---------------------------------------");
+    // print(email);
     request["username"] = email;
     String post = json.encode(request);
-    print(post);
+    // print(post);
     final http.Response response = await http.post(
       _emailURL,
       headers: <String, String>{
@@ -135,27 +135,27 @@ class trainingApiProvider {
       TrainingEntry item = TrainingEntry.fromJson(entry);
       Map<String, dynamic> entry1 = item.toJson();
 
-      print('inserting $entry1');
+      // print('inserting $entry1');
 
       var result = await db.insert(entry1);
       if(result==null){
-        print("Entry already existed");
+        // print("Entry already existed");
       }
       else{
-        print("Successfully added $entry1");
+        // print("Successfully added $entry1");
       }
     }
   }
   void getExerciseData() async {
 
-    print(_exerURL);
+    // print(_exerURL);
     String email = await UserRepository().getUsername();
     var request = {};
-    print("---------------------------------------");
-    print(email);
+    // print("---------------------------------------");
+    // print(email);
     request["username"] = email;
     String post = json.encode(request);
-    print(post);
+    // print(post);
     final http.Response response = await http.post(
       _exerURL,
       headers: <String, String>{
@@ -185,18 +185,18 @@ class trainingApiProvider {
       Exercise exer = Exercise.fromJson(entry);
       Map<String, dynamic> entry2 = exer.toJson();
 
-      print('inserting $entry2');
+      // print('inserting $entry2');
       //int id = entry2["id"];
       //await db.deleteAll();
       //await ExerciseDatabase.deleteDB();
 
       var result1 = await e_db.insert(entry2);
       if(result1==null){
-        print("Exercise already existed ... updating");
+        // print("Exercise already existed ... updating");
         await e_db.update(entry2);
       }
       else{
-        print("Successfully added $entry2");
+        // print("Successfully added $entry2");
       }
     }
   }
@@ -211,8 +211,8 @@ Future<bool> syncSetData() async {
     TrainingSet set = TrainingSet.fromJson(item);
     postData.add(set.toJson());
   }
-  print("set Data: $setData");
-  print("post Data: $postData");
+  // print("set Data: $setData");
+  // print("post Data: $postData");
   final http.Response response = await http.post(
     _setURL,
     headers: <String, String>{
@@ -223,14 +223,14 @@ Future<bool> syncSetData() async {
   if (response.statusCode == 200) {
     return true;
   } else {
-    print(json.decode(response.body).toString());
+    // print(json.decode(response.body).toString());
     return false;
   }
   return false;
 }
 
 Future<Token> getToken(UserLogin userLogin) async {
-  print(_tokenURL);
+  // print(_tokenURL);
   final http.Response response = await http.post(
     _tokenURL,
     headers: <String, String>{
@@ -241,13 +241,13 @@ Future<Token> getToken(UserLogin userLogin) async {
   if (response.statusCode == 200) {
     return Token.fromJson(json.decode(response.body));
   } else {
-    print(json.decode(response.body).toString());
+    // print(json.decode(response.body).toString());
     throw Exception(json.decode(response.body));
   }
 }
 
 Future<bool> createUser(UserSignup userSignup) async {
-  print(_registerURL);
+  // print(_registerURL);
   final http.Response response = await http.post(
     _registerURL,
     headers: <String, String>{
@@ -261,12 +261,12 @@ Future<bool> createUser(UserSignup userSignup) async {
       return true;
     }
     else{
-      print(data);
+      // print(data);
       throw Exception(data);
     }
     return true;
   } else {
-    print(json.decode(response.body).toString());
+    // print(json.decode(response.body).toString());
     throw Exception(json.decode(response.body));
   }
 }

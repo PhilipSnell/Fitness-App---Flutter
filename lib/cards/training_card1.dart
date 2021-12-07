@@ -97,9 +97,13 @@ class _TrainingCard1State extends State<TrainingCard1> {
                                 flex: 6,
                               ),
                               Expanded(
+
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
+                                    // -----------------------------------------------------
+                                    // Exercise Name
+                                    // -----------------------------------------------------
                                     Padding(
                                       padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
                                       child: ClipRRect(
@@ -113,11 +117,29 @@ class _TrainingCard1State extends State<TrainingCard1> {
                                           },
                                           child: Container(
                                             color: background,
-                                            padding: EdgeInsets.all(5),
-                                            // height:31,
-                                            child:Center(
-                                              child: Text("${exercise.data["name"]}",
-                                                  textAlign: TextAlign.center),
+                                            height: 30,
+                                            padding: EdgeInsets.fromLTRB(5,0,5,0),
+                                            child:Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Container(
+                                                  height: 20,
+                                                  width: 20,
+                                                ),
+                                                Text(
+                                                    "${exercise.data["name"]}",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      color: cardIcon
+                                                    ),
+                                                ),
+                                                Icon(
+
+                                                  Icons.comment,
+                                                  color: cardIcon,
+                                                  size: 20,
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ),

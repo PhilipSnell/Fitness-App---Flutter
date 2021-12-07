@@ -111,6 +111,7 @@ class _TrainingPage1State extends State<TrainingPage1> {
     setState(() {
       _difficultyValues = difficulties;
     });
+    // print(_difficultyValues);
   }
   @override
   void initState() {
@@ -121,7 +122,7 @@ class _TrainingPage1State extends State<TrainingPage1> {
 
   @override
   Widget build(BuildContext context) {
-    _useDifficultyFeedback();
+
     return new Scaffold(
       body: new Column(
         children: <Widget>[
@@ -284,14 +285,16 @@ class _TrainingPage1State extends State<TrainingPage1> {
 
     _trainingEntrys.forEach((entry) {
       _display.add(false);
-      print("Day num:");
-      print(entry.day);
+      // print("Day num:");
+      // print(entry.day);
       if(entry.day == selectedDay+1 ) {
         _list.add(entry);
       }
     });
     _difficultyValues = List(_list.length);
-    setState(() {});
+
     _useDifficultyFeedback();
+    setState(() {});
+
   }
 }

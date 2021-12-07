@@ -57,15 +57,19 @@ class _CommentPopupState extends State<CommentPopup> {
   }
   Future<void> _useCurrentFeedback() async{
     var combinedFeedback = await _getCurrentFeedback();
+    print(combinedFeedback);
     var splitFeedback = combinedFeedback.split(', ');
+    print("split: $splitFeedback");
     for (final feedback in splitFeedback){
-      final feedbackMessage = types.TextMessage(
-        authorId:  "0",
-        // authorId: "${entry["sender"]}",
-        id: "0",
-        text: feedback,
-      );
-      _messages.insert(0,feedbackMessage);
+      if (feedback != "dif" && feedback != "") {
+        final feedbackMessage = types.TextMessage(
+          authorId: "0",
+          // authorId: "${entry["sender"]}",
+          id: "0",
+          text: feedback,
+        );
+        _messages.insert(0, feedbackMessage);
+      }
     }
 
     setState(() {
@@ -73,17 +77,20 @@ class _CommentPopupState extends State<CommentPopup> {
     });
   }
   void _initialiseComment(){
-
-    final commentMessage = types.TextMessage(
-      authorId:  "1",
-      // authorId: "${entry["sender"]}",
-      id: "0",
-      text: widget.comment,
-    );
-    setState(() {
-      _messages.add(commentMessage);
-    });
+    print(widget.comment);
+    if (widget.comment != "") {
+      final commentMessage = types.TextMessage(
+        authorId: "1",
+        // authorId: "${entry["sender"]}",
+        id: "0",
+        text: widget.comment,
+      );
+      setState(() {
+        _messages.add(commentMessage);
+      });
+    }
     _useCurrentFeedback();
+
 
 
   }

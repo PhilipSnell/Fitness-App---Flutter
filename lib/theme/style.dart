@@ -17,6 +17,8 @@ Color drawerBackground = Color(0xffaaaaaa);
 Color dayBackSelected = Color(0xff606060);
 Color dayBackNotSelected = Color(0xffaaaaaa);
 Color featureColor = Color(0xfff4eb49);
+Color topLeftDif = Color(0xff606060);
+Color botRightDif = Color(0xff444444);
 
 // Text
 Color drawerText = Color(0xff232323);
