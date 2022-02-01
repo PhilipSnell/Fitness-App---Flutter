@@ -11,6 +11,8 @@ class TrainingSet {
   int sets;
   String reps;
   String weights;
+  int difficulty;
+  String comment;
   int e_id;
 
   TrainingSet({
@@ -18,6 +20,8 @@ class TrainingSet {
     this.sets,
     this.reps,
     this.weights,
+    this.difficulty,
+    this.comment,
     this.e_id,
   });
 
@@ -26,6 +30,8 @@ class TrainingSet {
     sets: json["sets"],
     reps: json["reps"],
     weights: json["weights"],
+    difficulty: json["difficulty"],
+    comment: json["comment"],
     e_id: json["e_id"],
   );
   Map<String, dynamic> toJson() => {
@@ -33,6 +39,8 @@ class TrainingSet {
     "sets": sets,
     "reps": reps,
     "weights": weights,
+    "difficulty": difficulty,
+    "comment": comment,
     "e_id": e_id,
   };
 }

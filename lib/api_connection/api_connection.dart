@@ -130,19 +130,20 @@ class trainingApiProvider {
       },
       body: post,
     );
+    print("deleting training db");
     await DatabaseHelper.deleteAll();
     for(final entry in json.decode(response.body)){
       TrainingEntry item = TrainingEntry.fromJson(entry);
       Map<String, dynamic> entry1 = item.toJson();
 
-      // print('inserting $entry1');
+      print('inserting $entry1');
 
       var result = await db.insert(entry1);
       if(result==null){
-        // print("Entry already existed");
+        print("Entry already existed");
       }
       else{
-        // print("Successfully added $entry1");
+        print("Successfully added $entry1");
       }
     }
   }
@@ -208,11 +209,19 @@ Future<bool> syncSetData() async {
   List<Map<String, dynamic>> setData = await set_db.queryAllRows();
   List<Map<String, dynamic>> postData = [];
   for (final item in setData){
+
     TrainingSet set = TrainingSet.fromJson(item);
+    if (set.comment == null){
+      set.comment = '';
+    }
+    if (set.sets == -1){
+      set.reps = "-1";
+      set.weights = "-1";
+    }
     postData.add(set.toJson());
   }
-  // print("set Data: $setData");
-  // print("post Data: $postData");
+  //print("set Data: $setData");
+    print("post Data: ${json.encode(postData)}");
   final http.Response response = await http.post(
     _setURL,
     headers: <String, String>{
@@ -226,7 +235,6 @@ Future<bool> syncSetData() async {
     // print(json.decode(response.body).toString());
     return false;
   }
-  return false;
 }
 
 Future<Token> getToken(UserLogin userLogin) async {

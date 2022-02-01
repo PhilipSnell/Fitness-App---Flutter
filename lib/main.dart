@@ -62,6 +62,7 @@ class App extends StatelessWidget {
         primarySwatch: MyYellow,
         accentColor: featureColor,
         focusColor: featureColor,
+        fontFamily: 'Roboto',
         scaffoldBackgroundColor: background,
         textSelectionTheme: TextSelectionThemeData(
           selectionHandleColor: Color(0x232323), //Set to see through

@@ -78,46 +78,40 @@ class _TrainingPage1State extends State<TrainingPage1> {
   List<dynamic> _list = [];
   List<TrainingEntry> _trainingEntrys = [];
   // Get json result and convert it to model. Then add
-  Future<Null> _getTrainingEntrys() async {
+  Future<Null> _queryTainingAPI() async{
     await trainingApiProvider().getTrainingData();
     var list = await t_db.queryAllRows();
+    for(final entry in list){
+      print(entry);
+    }
     setState(() {
       _trainingEntrys = list;
     });
     onDayChanged();
   }
+  // Future<Null> _getTrainingEntrys() async {
+  //   // await trainingApiProvider().getTrainingData();
+  //   var list = await t_db.queryAllRows();
+  //   for(final entry in list){
+  //     print(entry);
+  //   }
+  //   setState(() {
+  //     _trainingEntrys = list;
+  //   });
+  //   onDayChanged();
+  // }
   Future<void> _pullRefresh() async{
-    _getTrainingEntrys();
+    _queryTainingAPI();
   }
   int selectedDay = 0;
   Future<int> _getDays() async{
     return t_db.getDays();
   }
-  List<int> _difficultyValues;
 
-  Future<List<int>> _getDifficultyFeedback() async {
-    List<int> setDifficulties = [];
-    for (final entry in _list){
-      List setDifficulty = await getSetFeedback(entry.id);
-      if (setDifficulty[1] == "") {
-          setDifficulty[1] = null;
-      }
-      setDifficulties.add(setDifficulty[1]);
-    }
-    return setDifficulties;
-  }
-  Future<void> _useDifficultyFeedback() async{
-    List<int> difficulties = await _getDifficultyFeedback();
-    setState(() {
-      _difficultyValues = difficulties;
-    });
-    // print(_difficultyValues);
-  }
   @override
   void initState() {
     super.initState();
-    _getTrainingEntrys();
-    _useDifficultyFeedback();
+    _queryTainingAPI();
   }
 
   @override
@@ -156,6 +150,7 @@ class _TrainingPage1State extends State<TrainingPage1> {
                                         selectedDay = index;
                                         onDayChanged();
                                       }
+
                                       ),
                                   child: Card(
                                     shape: RoundedRectangleBorder(
@@ -242,7 +237,6 @@ class _TrainingPage1State extends State<TrainingPage1> {
                                       weight: _list[index].weight,
                                       t_id:_list[index].id,
                                       e_id:_list[index].exerciseId,
-                                      difficulty: _difficultyValues[index],
                                       setSubmitAllowed:(bool value){
                                         setState(() {
                                           submit_allowed = value;
@@ -285,16 +279,15 @@ class _TrainingPage1State extends State<TrainingPage1> {
 
     _trainingEntrys.forEach((entry) {
       _display.add(false);
+      print(entry);
       // print("Day num:");
       // print(entry.day);
       if(entry.day == selectedDay+1 ) {
+
         _list.add(entry);
       }
     });
-    _difficultyValues = List(_list.length);
 
-    _useDifficultyFeedback();
-    setState(() {});
 
   }
 }

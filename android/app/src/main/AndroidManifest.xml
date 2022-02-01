@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ptapp.xcell">
    <application
-        android:label="xcell"
+        android:label="Peak"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

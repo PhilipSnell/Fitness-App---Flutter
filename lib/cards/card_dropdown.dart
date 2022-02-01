@@ -21,7 +21,6 @@ class CardDropDown extends StatefulWidget {
   final int e_id;
   final bool display;
   final Function(bool) setSubmitAllowed;
-  int difficulty;
 
   CardDropDown({
     Key key,
@@ -31,7 +30,6 @@ class CardDropDown extends StatefulWidget {
     this.t_id,
     this.e_id,
     this.setSubmitAllowed,
-    this.difficulty,
   }) : super(key: key);
 
   @override
@@ -40,9 +38,11 @@ class CardDropDown extends StatefulWidget {
 
 class _CardDropDownState extends State<CardDropDown> {
   // need to load the itemList from db
-  int difficulty;
   final set_db = SetDatabase.instance;
   final db = ExerciseDatabase.instance;
+  String comment_before_set = "";
+  String repsDefault;
+  String weightDefault;
 
   //Map<String, String> reps = {};
 
@@ -64,12 +64,24 @@ class _CardDropDownState extends State<CardDropDown> {
     saveList(list);
     widget.setSubmitAllowed(true);
   }
-
+  void getDefaults(List<TrainingSet> list){
+    if (list.length == 0){
+      repsDefault = widget.reps;
+      weightDefault = widget.weight;
+    }
+    else{
+      repsDefault = list.last.reps;
+      weightDefault = list.last.weights;
+    }
+  }
   Future<List<TrainingSet>> loadList() async{
-    // Map<String, dynamic> item;
-    // SetDatabase.deleteDB();
-    var sets = set_db.queryID(widget.t_id, widget.reps, widget.weight, widget.e_id,);
-    difficulty = widget.difficulty;
+    var sets = await set_db.queryID(widget.t_id);
+    if (sets.length > 0) {
+      if (sets[0].sets == -1) {
+        comment_before_set = sets[0].comment;
+        sets.clear();
+      }
+    }
     return sets;
   }
 
@@ -78,8 +90,23 @@ class _CardDropDownState extends State<CardDropDown> {
     String weights = "";
     Map<String, dynamic> row;
     if(list.isEmpty){
-      await set_db.delete(widget.t_id);
-      print("Removing last set");
+      if(comment_before_set == "") {
+        await set_db.delete(widget.t_id);
+        print("Removing last set");
+      }else{
+        await set_db.delete(widget.t_id);
+        print("Removing last set");
+        row = {
+          't_id': widget.t_id,
+          'sets': -1,
+          'reps': "",
+          'weights': "",
+          'difficulty': 0,
+          'comment':comment_before_set,
+          'e_id': 0,
+        };
+        set_db.insert(row);
+      }
       loadList();
     }else {
 
@@ -93,15 +120,30 @@ class _CardDropDownState extends State<CardDropDown> {
         reps = reps.substring(0, reps.length - 1);
         weights = weights.substring(0, weights.length - 1);
       }
+      if (1 <= list[0].difficulty && list[0].difficulty <= 10 ){
+        row = {
+          't_id': list[0].t_id,
+          'sets': list.length,
+          'reps': reps,
+          'weights': weights,
+          'difficulty':list[0].difficulty,
+          'comment':list[0].comment,
+          'e_id': list[0].e_id,
+        };
+      }else{
+        row = {
+          't_id': list[0].t_id,
+          'sets': list.length,
+          'reps': reps,
+          'weights': weights,
+          'difficulty': 0,
+          'comment':list[0].comment,
+          'e_id': list[0].e_id,
+        };
+      }
 
-      row = {
-        't_id': list[0].t_id,
-        'sets': list.length,
-        'reps': reps,
-        'weights': weights,
-        'e_id': list[0].e_id,
-      };
       print("INSERTING :$row");
+
       var result = await set_db.insert(row);
       if(result==null){
         print("Set already existed ... updating");
@@ -116,11 +158,14 @@ class _CardDropDownState extends State<CardDropDown> {
       print("save completed");
     });
   }
-
+  void initialiseDefaults(){
+    repsDefault = widget.reps;
+    weightDefault = widget.weight;
+  }
   @override
   void initState() {
     super.initState();
-
+    initialiseDefaults();
   }
 
   @override
@@ -133,6 +178,7 @@ class _CardDropDownState extends State<CardDropDown> {
         child: FutureBuilder<List<TrainingSet>>(
           future: loadList(),
           builder: (context, listOfSets) {
+
             if(listOfSets.hasData){
 
               return Column(
@@ -163,7 +209,18 @@ class _CardDropDownState extends State<CardDropDown> {
                                 : EdgeInsets.zero,
                             constraints: BoxConstraints(),
                             onPressed: () {
-                              listOfSets.data.removeLast();
+                              // if ladder to avoid removal of last set if it has a comment
+                              if(listOfSets.data.length == 1){
+                                if(listOfSets.data[0].comment==null || listOfSets.data[0].comment.isNotEmpty){
+                                  comment_before_set = listOfSets.data[0].comment;
+                                  listOfSets.data.clear();
+                                }else{
+                                  listOfSets.data.removeLast();
+                                }
+                              }else{
+                                listOfSets.data.removeLast();
+                              }
+
                               saveList(listOfSets.data);
                               widget.setSubmitAllowed(true);
                             }
@@ -171,7 +228,8 @@ class _CardDropDownState extends State<CardDropDown> {
                       ),
                       Visibility(
                         visible: listOfSets.data.length > 0 ? true : false,
-                        child: InkWell(
+                        child: listOfSets.data.length > 0
+                            ? InkWell(
                             onTap: (){
                               showDialog(
                                 context: context,
@@ -182,7 +240,9 @@ class _CardDropDownState extends State<CardDropDown> {
                                       child: Center(
                                         child: DropdownButton<int>(
                                           focusColor:Colors.white,
-                                          value: difficulty,
+                                          value: 1 <= listOfSets.data[0].difficulty && listOfSets.data[0].difficulty <=10
+                                          ? listOfSets.data[0].difficulty
+                                          : 1,
                                           //elevation: 5,
                                           style: TextStyle(color: Colors.white,),
                                           iconEnabledColor:Colors.white,
@@ -213,10 +273,10 @@ class _CardDropDownState extends State<CardDropDown> {
                                           onChanged: (int value) {
 
                                             setState(() {
-                                              difficulty = value;
-                                              widget.difficulty = value;
+                                              listOfSets.data[0].difficulty = value;
+                                              saveList(listOfSets.data);
                                             });
-                                            SetDifficulty(widget.t_id, value);
+                                            // SetDifficulty(widget.t_id, value);
                                             Navigator.pop(context);
                                           },
                                         ),
@@ -239,7 +299,7 @@ class _CardDropDownState extends State<CardDropDown> {
                                             width: 40,
                                             color: botRightDif,
                                             child: Padding(
-                                              padding: const EdgeInsets.fromLTRB(0,14,3,0),
+                                              padding: const EdgeInsets.fromLTRB(0,11,3,0),
                                               child: Text("10",
                                               textAlign: TextAlign.right,
                                               ),
@@ -251,9 +311,9 @@ class _CardDropDownState extends State<CardDropDown> {
                                             padding: const EdgeInsets.fromLTRB(3,3,0,0),
                                             width: MediaQuery.of(context).size.width,
                                             color: topLeftDif,
-                                            child: difficulty == null
-                                                  ?Text("#")
-                                                  :Text("${difficulty}"),
+                                            child: 1 <= listOfSets.data[0].difficulty && listOfSets.data[0].difficulty <=10
+                                                  ?Text("${listOfSets.data[0].difficulty}")
+                                                  :Text("#"),
 
                                             // child: difficulty != null
                                             //     ? Text("${difficulty}")
@@ -266,7 +326,8 @@ class _CardDropDownState extends State<CardDropDown> {
                                 ),
                               ),
                             )
-                        ),
+                        )
+                        :Container(),
                       ),
                       IconButton(
                           icon: Icon(
@@ -276,7 +337,14 @@ class _CardDropDownState extends State<CardDropDown> {
                           padding: listOfSets.data.length > 0 ? EdgeInsets.only(left: 15) : EdgeInsets.zero,
                           constraints: BoxConstraints(),
                           onPressed: () {
-                            listOfSets.data.add(TrainingSet(t_id: widget.t_id, sets: 1, reps: widget.reps, weights: widget.weight, e_id: widget.e_id));
+                            getDefaults(listOfSets.data);
+                            if (comment_before_set != ""){
+                              listOfSets.data.add(TrainingSet(t_id: widget.t_id, sets: 1, reps: repsDefault, weights: weightDefault, difficulty: 0, comment: comment_before_set, e_id: widget.e_id));
+                              comment_before_set = "";
+                            }
+                            else{
+                              listOfSets.data.add(TrainingSet(t_id: widget.t_id, sets: 1, reps: repsDefault, weights: weightDefault, difficulty: 0, e_id: widget.e_id));
+                            }
                             saveList(listOfSets.data);
                             widget.setSubmitAllowed(true);
                           }

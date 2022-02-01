@@ -23,8 +23,7 @@ class MyPage extends StatefulWidget {
 class _PageState extends State<MyPage> {
   PageController _pageController;
   int _page = 0;
-  Future<String> _username ;
-  String username;
+  String _username ;
   String data ;
   String _email = "User";
 
@@ -139,28 +138,29 @@ class _PageState extends State<MyPage> {
                         child: DefaultTextStyle(
                             style: TextStyle(fontSize: 16),
                             textAlign: TextAlign.center,
-                            child: FutureBuilder<String>(
-                              future: _username,
-                              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                                List<Widget> children;
-                                if (snapshot.hasData) {
-                                  _email = snapshot.data;
-                                  children = <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 16),
-                                      child: Text('$_email'),
-                                    )
-                                  ];
-                                }
-                                return Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: children,
-                                  ),
-                                );
-                              },
-                            )
+                            child: Text('$_username'),
+                            // child: FutureBuilder<String>(
+                            //   future: _username,
+                            //   builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                            //     List<Widget> children;
+                            //     if (snapshot.hasData) {
+                            //       _email = snapshot.data;
+                            //       children = <Widget>[
+                            //         Padding(
+                            //           padding: const EdgeInsets.only(top: 16),
+                            //           child: Text('$_email'),
+                            //         )
+                            //       ];
+                            //     }
+                            //     return Center(
+                            //       child: Column(
+                            //         mainAxisAlignment: MainAxisAlignment.center,
+                            //         crossAxisAlignment: CrossAxisAlignment.center,
+                            //         children: children,
+                            //       ),
+                            //     );
+                            //   },
+                            // )
                         ),
                       )
                     ],
@@ -262,14 +262,20 @@ class _PageState extends State<MyPage> {
   void navigationTapped(int page) {
     _pageController.jumpToPage(page);
   }
+  Future<void> getUsername() async {
+    final String username = await UserRepository().getUsername();
+    setState(() {
+      _username = username;
+    });
 
+  }
   @override
   void initState(){
     super.initState();
     _pageController = PageController(initialPage: 0);
-    _username = UserRepository().getUsername();
-    trainingApiProvider().getTrainingData();
-    trainingApiProvider().getExerciseData();
+
+    // trainingApiProvider().getExerciseData();
+
   }
 
   @override

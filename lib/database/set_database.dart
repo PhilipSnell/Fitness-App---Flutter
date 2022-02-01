@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -18,7 +19,8 @@ class SetDatabase {
   static final columnReps = 'reps';
   static final columnWeights = 'weights';
   static final columnEId = 'e_id';
-
+  static final columnDiff = 'difficulty';
+  static final columnComment = 'comment';
   // make this a singleton class
   SetDatabase._privateConstructor();
   static final SetDatabase instance = SetDatabase._privateConstructor();
@@ -49,6 +51,8 @@ class SetDatabase {
             "$columnSets INTEGER NOT NULL, "
             "$columnReps TEXT NOT NULL, "
             "$columnWeights TEXT NOT NULL, "
+            "$columnDiff  INTEGER, "
+            "$columnComment TEXT, "
             "$columnEId INTEGER NOT NULL "
             ")"
     );
@@ -77,7 +81,7 @@ class SetDatabase {
 
     return i;
   }
-  Future<List<TrainingSet>> queryID(int t_id, String defaultRep, String defaultWeight, int e_id) async {
+  Future<List<TrainingSet>> queryID(int t_id) async {
     Database db = await instance.database;
     List<Map<String, dynamic>> items = await db.query(table, where: '$columnId = ?', whereArgs: [t_id]);
     if(items.isEmpty){
@@ -90,7 +94,7 @@ class SetDatabase {
       int e_id = items[0]["e_id"];
       List<TrainingSet> set_list = [];
       for (var i=0; i<reps.length; i+=1){
-        set_list.add(TrainingSet(t_id: setId, sets: sets, reps: reps[i], weights: weights[i], e_id: e_id));
+        set_list.add(TrainingSet(t_id: setId, sets: sets, reps: reps[i], weights: weights[i], difficulty: items[0]["difficulty"], comment: items[0]["comment"], e_id: e_id));
       }
       //List<TrainingSet> sets =
       return set_list;
@@ -109,6 +113,25 @@ class SetDatabase {
     Database db = await instance.database;
     int id = row[columnId];
     return await db.update(table, row, where: '$columnId = ?', whereArgs: [id]);
+  }
+
+  Future<int> updateComment(int t_id, String comment) async {
+    Database db = await instance.database;
+    Map<String, dynamic> row;
+    List<dynamic> whereArguments = [t_id];
+    var entry = await db.query(table, where: '$columnId = ?', whereArgs: whereArguments);
+    print("Update Comment: ${entry[0]}");
+    row = {
+      't_id': t_id,
+      'sets': entry[0]['sets'],
+      'reps': entry[0]['reps'],
+      'weights': entry[0]['weights'],
+      'difficulty': entry[0]['difficulty'],
+      'comment':comment,
+      'e_id': entry[0]['e_id'],
+    };
+    print("Update Comment: $row");
+    return await db.update(table, row, where: '$columnId = ?', whereArgs: whereArguments);
   }
 
   // Deletes the row specified by the id. The number of affected rows is

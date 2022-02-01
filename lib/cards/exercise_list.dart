@@ -27,9 +27,9 @@ class _ExerciseListState extends State<ExerciseList> {
   Future<Null> _getExercises() async {
     await trainingApiProvider().getExerciseData();
     var list = await db.queryAllRows();
-    setState(() {
-      _exercises = list;
-    });
+
+    _exercises = list;
+
   }
 
   @override
