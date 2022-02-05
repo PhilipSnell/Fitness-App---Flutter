@@ -78,7 +78,7 @@ class _CommentPopupState extends State<CommentPopup> {
     if (sets.length > 0){
       setsHasData = true;
       combinedFeedback = sets[0].comment;
-      if (combinedFeedback == null){
+      if (combinedFeedback == '###'){
         combinedFeedback = "";
       }
     }

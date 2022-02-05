@@ -81,6 +81,9 @@ class _CardDropDownState extends State<CardDropDown> {
         comment_before_set = sets[0].comment;
         sets.clear();
       }
+      else if (sets[0].comment == '###'){
+        sets[0].comment = null;
+      }
     }
     return sets;
   }
@@ -119,6 +122,11 @@ class _CardDropDownState extends State<CardDropDown> {
       if (reps != null && reps.length > 0) {
         reps = reps.substring(0, reps.length - 1);
         weights = weights.substring(0, weights.length - 1);
+      }
+      print("-----Comment------");
+      print(list[0].comment);
+      if(list[0].comment == null){
+        list[0].comment = '###';
       }
       if (1 <= list[0].difficulty && list[0].difficulty <= 10 ){
         row = {
