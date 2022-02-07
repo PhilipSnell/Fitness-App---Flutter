@@ -19,6 +19,7 @@ Color dayBackNotSelected = Color(0xffaaaaaa);
 Color featureColor = Color(0xfff4eb49);
 Color topLeftDif = Color(0xff606060);
 Color botRightDif = Color(0xff444444);
+Color userMessage = Color(0xff444444);
 
 // Text
 Color drawerText = Color(0xff232323);
@@ -29,6 +30,7 @@ Color loggingItemName = Color(0xffc0c0c0);
 Color dayTextNotSelected = Color(0xff444444);
 Color dayTextSelected = Color(0xfff4eb49);
 Color cardFeatureText = Color(0xfff4eb49);
+Color hintMessage = Color(0xff717171);
 
 // Icons
 Color cardIcon = Color(0xffc0c0c0);

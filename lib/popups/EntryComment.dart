@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:xcell/api_connection/set_feedback.dart';
 import 'package:xcell/database/set_database.dart';
 import 'package:xcell/theme/style.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+
+import '../chat/chat.dart';
+import '../models/text_message.dart';
 
 class CommentPopup extends StatefulWidget {
 
   final String name;
   final String comment;
   final int t_id;
+  final Function(bool) setSubmitAllowed;
+
   const CommentPopup({
     Key key,
     this.comment,
     this.name,
-    this.t_id
+    this.t_id,
+    this.setSubmitAllowed
   }) : super(key: key);
 
   @override
@@ -23,24 +27,21 @@ class CommentPopup extends StatefulWidget {
 
 class _CommentPopupState extends State<CommentPopup> {
   final set_db = SetDatabase.instance;
-  final _user = const types.User(id: '0');
   bool setsHasData = false;
-  List<types.Message> _messages = [];
+  List<TextMessage> _messages = [];
 
-  void _handleSendPressed(types.PartialText message) {
+  void _handleSendPressed(TextMessage message) {
     Map<String, dynamic> row;
-    print("id == ${_user.id}");
-    final feedback = types.TextMessage(
-      authorId: _user.id,
-      id: "0",
-      text: message.text,
+    final feedback = TextMessage(
+      author_id: 0,
+      message: message.message,
 
     );
     _addMessage(feedback);
     String combinedFeedback = "";
     for (final message in _messages){
-      if (message.authorId == "0") {
-        combinedFeedback = message.toJson()['text']+", "+combinedFeedback;
+      if (message.author_id == 0) {
+        combinedFeedback = message.toJson()['message']+", "+combinedFeedback;
       }
 
     }
@@ -52,33 +53,33 @@ class _CommentPopupState extends State<CommentPopup> {
       row = {
         't_id': widget.t_id,
         'sets': -1,
-        'reps': "",
-        'weights': "",
+        'reps': "-1",
+        'weights': "-1",
         'difficulty': 0,
         'comment':combinedFeedback,
         'e_id': 0,
       };
       set_db.insert(row);
     }
-
+    widget.setSubmitAllowed(true);
   }
 
-  void _addMessage(types.Message message) {
+  void _addMessage(TextMessage message) {
     setState(() {
-      _messages.insert(0,message);
+      _messages.insert(_messages.length,message);
     });
   }
-  // Future<String> _getCurrentFeedback() async {
-  //   List setFeedback = await getSetFeedback(widget.t_id);
-  //   return setFeedback[0];
-  // }
+  Future<String> _getCurrentFeedback() async {
+    List setFeedback = await getSetFeedback(widget.t_id);
+    return setFeedback[0];
+  }
   Future<void> _useCurrentFeedback() async{
     var sets = await set_db.queryID(widget.t_id);
     var combinedFeedback;
     if (sets.length > 0){
       setsHasData = true;
       combinedFeedback = sets[0].comment;
-      if (combinedFeedback == '###'){
+      if (combinedFeedback == '###' || combinedFeedback == null){
         combinedFeedback = "";
       }
     }
@@ -88,30 +89,27 @@ class _CommentPopupState extends State<CommentPopup> {
     }
     print(combinedFeedback);
     var splitFeedback = combinedFeedback.split(', ');
-    print("split: $splitFeedback");
+    // print("split: $splitFeedback");
     for (final feedback in splitFeedback){
       if (feedback != "dif" && feedback != "") {
-        final feedbackMessage = types.TextMessage(
-          authorId: "0",
-          // authorId: "${entry["sender"]}",
-          id: "0",
-          text: feedback,
+        final feedbackMessage = TextMessage(
+          author_id: 0,
+          message: feedback,
         );
         _messages.insert(0, feedbackMessage);
       }
     }
     setState(() {
-      _messages=_messages;
+      _messages=_messages.reversed.toList();
     });
   }
   void _initialiseComment(){
     print(widget.comment);
     if (widget.comment != "") {
-      final commentMessage = types.TextMessage(
-        authorId: "1",
+      final commentMessage = TextMessage(
+        author_id: 1,
         // authorId: "${entry["sender"]}",
-        id: "0",
-        text: widget.comment,
+        message: widget.comment,
       );
       setState(() {
         _messages.add(commentMessage);
@@ -133,8 +131,9 @@ class _CommentPopupState extends State<CommentPopup> {
 
     return AlertDialog(
       backgroundColor: cardBack,
+      insetPadding: EdgeInsets.fromLTRB(0,150,0,50),
       title: Padding(
-        padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+        padding: EdgeInsets.fromLTRB(0,5,0,5),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10.0),
           child: Container(
@@ -143,7 +142,9 @@ class _CommentPopupState extends State<CommentPopup> {
             // height:31,
             child:Center(
               child: Text("${widget.name}",
-                  textAlign: TextAlign.center),
+                  textAlign: TextAlign.center,
+                style: TextStyle(),
+              ),
             ),
           ),
         ),
@@ -156,12 +157,14 @@ class _CommentPopupState extends State<CommentPopup> {
         children: [
           Expanded(
             child: SizedBox(
-              height: 300,
+              height: 400,
               width: 300,
+
+              // heightFactor: 0.1,
+              // widthFactor: 0.8,
               child: Chat(
                   messages: _messages,
                   onSendPressed: _handleSendPressed,
-                  user: _user
               ),
             ),
           ),

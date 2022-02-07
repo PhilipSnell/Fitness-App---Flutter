@@ -8,8 +8,8 @@ import 'package:xcell/repository/user_repository.dart';
 final _group = "/groups/";
 final _tracking = "/trackingValsUpdate/";
 
-final _trackingURL = APIglobs.base + APIglobs.api +_tracking;
-final _groupURL = APIglobs.base + APIglobs.api + _group;
+final _trackingURL = Uri.parse(APIglobs.base + APIglobs.api +_tracking);
+final _groupURL = Uri.parse(APIglobs.base + APIglobs.api + _group);
 
 Future<List> getGroupData() async {
 

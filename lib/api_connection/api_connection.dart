@@ -12,7 +12,7 @@ import 'package:xcell/models/training_set.dart';
 import 'package:xcell/repository/user_repository.dart';
 import 'package:xcell/models/training_entry.dart';
 import 'package:xcell/models/exercise.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+// import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 class APIglobs {
   static var api = "/api";
@@ -26,86 +26,87 @@ final _send = "/messages/";
 final _tokenEndpoint = "/api-token-auth/";
 final _register = "/register/";
 final _group = "/groups/";
-final _groupURL = APIglobs.base + APIglobs.api + _group;
-final _chatURL = APIglobs.base + APIglobs.api + _chat;
-final _setURL = APIglobs.base + APIglobs.api + _set;
-final _sendMessageURL = APIglobs.base + APIglobs.api + _send;
-final _emailURL = APIglobs.base + APIglobs.api + _email;
-final _exerURL = APIglobs.base + APIglobs.api + _exer;
-final _tokenURL = APIglobs.base + APIglobs.api + _tokenEndpoint;
-final _registerURL = APIglobs.base + APIglobs.api + _register;
+final Uri _groupURL = Uri.parse(APIglobs.base + APIglobs.api + _group);
+final _chatURL = Uri.parse(APIglobs.base + APIglobs.api + _chat);
+final _setURL = Uri.parse(APIglobs.base + APIglobs.api + _set);
+final _sendMessageURL = Uri.parse(APIglobs.base + APIglobs.api + _send);
+final _emailURL = Uri.parse(APIglobs.base + APIglobs.api + _email);
+final _exerURL = Uri.parse(APIglobs.base + APIglobs.api + _exer);
+final _tokenURL = Uri.parse(APIglobs.base + APIglobs.api + _tokenEndpoint);
+final _registerURL = Uri.parse(APIglobs.base + APIglobs.api + _register);
 
 final defaultImage = APIglobs.base + "/media/images/pullup_wbq2Kcf.png";
   final utubeThumbnailBase = "https://i3.ytimg.com/vi/";
 
-void sendMessage(types.TextMessage textMessage) async {
+// void sendMessage(types.TextMessage textMessage) async {
+//
+//   // print(_sendMessageURL);
+//   // String email = await UserRepository().getUsername();
+//
+//   // print("---------------------------------------");
+//   // print(email);
+//   var request = {};
+//   request["sender"] = 1;
+//   request["receiver"] = 2;
+//   request["message"] = textMessage.text;
+//   // String timestamp = "${DateTime.fromMillisecondsSinceEpoch(textMessage.timestamp*1000)}";
+//   // timestamp = timestamp.replaceAll(" ","T");
+//   // timestamp = "${timestamp}000Z";
+//   // request["timestamp"] = timestamp;
+//   // print(request);
+//   String post = json.encode(request);
+//
+//   // print(post);
+//   final http.Response response = await http.post(
+//     _sendMessageURL,
+//     headers: <String, String>{
+//       'Content-Type': 'application/json; charset=UTF-8',
+//     },
+//     body: post,
+//   );
+//   // print(response.body);
+// }
 
-  // print(_sendMessageURL);
-  // String email = await UserRepository().getUsername();
-
-  // print("---------------------------------------");
-  // print(email);
-  var request = {};
-  request["sender"] = 1;
-  request["receiver"] = 2;
-  request["message"] = textMessage.text;
-  String timestamp = "${DateTime.fromMillisecondsSinceEpoch(textMessage.timestamp*1000)}";
-  timestamp = timestamp.replaceAll(" ","T");
-  timestamp = "${timestamp}000Z";
-  request["timestamp"] = timestamp;
-  // print(request);
-  String post = json.encode(request);
-
-  // print(post);
-  final http.Response response = await http.post(
-    _sendMessageURL,
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: post,
-  );
-  // print(response.body);
-}
-
-Future<List<types.TextMessage>> getChatData() async {
-
-  // print(_chatURL);
-  String email = await UserRepository().getUsername();
-  var request = {};
-  // print("---------------------------------------");
-  // print(email);
-  request["username"] = email;
-  String post = json.encode(request);
-
-  // print(post);
-  final http.Response response = await http.post(
-    _chatURL,
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: post,
-  );
-  List<types.TextMessage> messages=[];
-  for(final entry in json.decode(response.body)){
-    String time = entry["timestamp"].replaceAll("T", " ");
-    if (time != null && time.length > 0) {
-      time = time.substring(0, time.length - 1);
-    }
-    final textMessage = types.TextMessage(
-      authorId: entry["sender"] == 1 ? "0" : "1",
-      // authorId: "${entry["sender"]}",
-      id: "0",
-
-      text: entry["message"],
-      timestamp: (DateTime.parse(time).millisecondsSinceEpoch / 1000).floor(),
-    );
-    messages.add(textMessage);
-    //print(DateTime.parse(time).millisecondsSinceEpoch);
-  }
-  //print(DateTime.now().millisecondsSinceEpoch);
-  return messages;
-}
-
+// Future<List<types.TextMessage>> getChatData() async {
+//
+//   // print(_chatURL);
+//   String email = await UserRepository().getUsername();
+//   var request = {};
+//   // print("---------------------------------------");
+//   // print(email);
+//   request["username"] = email;
+//   String post = json.encode(request);
+//
+//   // print(post);
+//   final http.Response response = await http.post(
+//     _chatURL,
+//     headers: <String, String>{
+//       'Content-Type': 'application/json; charset=UTF-8',
+//     },
+//     body: post,
+//   );
+//   // List<types.TextMessage> messages=[];
+//   for(final entry in json.decode(response.body)){
+//     String time = entry["timestamp"].replaceAll("T", " ");
+//     if (time != null && time.length > 0) {
+//       time = time.substring(0, time.length - 1);
+//     }
+//     // final textMessage = types.TextMessage(
+//     //   authorId: entry["sender"] == 1 ? "0" : "1",
+//     //   // authorId: "${entry["sender"]}",
+//     //   id: "0",
+//     //
+//     //   text: entry["message"],
+//     //   timestamp: (DateTime.parse(time).millisecondsSinceEpoch / 1000).floor(),
+//     // );
+//     // messages.add(textMessage);
+//     //print(DateTime.parse(time).millisecondsSinceEpoch);
+//   }
+//   //print(DateTime.now().millisecondsSinceEpoch);
+//   // return messages;
+//   return null;
+// }
+//
 
 
 

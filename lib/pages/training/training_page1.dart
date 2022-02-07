@@ -229,6 +229,11 @@ class _TrainingPage1State extends State<TrainingPage1> {
                                         sets:_list[index].sets,
                                         id:_list[index].id,
                                         comment:_list[index].comment,
+                                        setSubmitAllowed:(bool value){
+                                          setState(() {
+                                            submit_allowed = value;
+                                          });
+                                        },
                                       ),
                                     ),
                                     CardDropDown(

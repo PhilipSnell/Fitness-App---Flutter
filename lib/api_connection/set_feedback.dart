@@ -8,8 +8,8 @@ import 'package:xcell/repository/user_repository.dart';
 final _get = "/getfeedback/";
 final _set = "/setfeedback/";
 
-final _getURL = APIglobs.base + APIglobs.api +_get;
-final _setURL = APIglobs.base + APIglobs.api + _set;
+final Uri _getURL = Uri.parse(APIglobs.base + APIglobs.api +_get);
+final _setURL = Uri.parse(APIglobs.base + APIglobs.api + _set);
 
 Future<List> getSetFeedback(int t_id) async {
 

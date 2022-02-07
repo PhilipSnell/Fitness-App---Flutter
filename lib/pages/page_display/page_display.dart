@@ -25,7 +25,7 @@ class _PageState extends State<MyPage> {
   int _page = 0;
   String _username ;
   String data ;
-  String _email = "User";
+  // String _email = "User";
 
   final db = DatabaseHelper.instance;
   Future<List <int>> _getPhase() async{
@@ -33,9 +33,10 @@ class _PageState extends State<MyPage> {
   }
   List pageTitles = [
     // "Home",
-    "Logging",
     "Training",
-    "Exercises",
+    "Logging",
+
+    // "Exercises",
     // "Report",
     // "Settings",
   ];
@@ -44,19 +45,19 @@ class _PageState extends State<MyPage> {
     //   "icon": Icons.home,
     //   "name": "Home Page",
     // },
-
-    {
-      "icon": Icons.fact_check_outlined,
-      "name": "Logging",
-    },
     {
       "icon": Icons.calendar_today,
       "name": "Training Plan",
     },
     {
-      "icon": MaterialCommunityIcons.dumbbell,
-      "name": "Exercises",
+      "icon": Icons.fact_check_outlined,
+      "name": "Logging",
     },
+
+    // {
+    //   "icon": MaterialCommunityIcons.dumbbell,
+    //   "name": "Exercises",
+    // },
     // {
     //   "icon": Icons.stacked_bar_chart,
     //   "name": "Report",
@@ -244,11 +245,12 @@ class _PageState extends State<MyPage> {
           controller: _pageController,
           onPageChanged: onPageChanged,
           children: <Widget>[
-            LoggingPage(),
             TrainingPage1(),
+            LoggingPage(),
+
             // TrainPage(),
 
-            exercisePage(),
+            // exercisePage(),
             // reportPage(),
             // settingsPage(),
 

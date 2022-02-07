@@ -7,6 +7,7 @@ import "package:xcell/bloc/authentication_bloc.dart";
 import 'package:xcell/cards/group_card.dart';
 import 'package:xcell/cards/training_card.dart';
 import 'package:xcell/theme/style.dart';
+
 class LoggingPage extends StatefulWidget {
   const LoggingPage({Key key}) : super(key: key);
 

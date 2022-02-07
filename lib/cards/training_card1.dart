@@ -17,6 +17,7 @@ class TrainingCard1 extends StatefulWidget {
   final int sets;
   final int id;
   final String comment;
+  final Function(bool) setSubmitAllowed;
 
   const TrainingCard1({
     Key key,
@@ -25,7 +26,8 @@ class TrainingCard1 extends StatefulWidget {
     this.weight,
     this.sets,
     this.id,
-    this.comment
+    this.comment,
+    this.setSubmitAllowed
   }) : super(key: key);
   @override
   _TrainingCard1State createState() => _TrainingCard1State();
@@ -112,7 +114,16 @@ class _TrainingCard1State extends State<TrainingCard1> {
                                           onTap: (){
                                             showDialog(
                                               context: context,
-                                              builder: (BuildContext context) => CommentPopup(comment: widget.comment, name: exercise.data['name'],t_id: widget.id),
+                                              builder: (BuildContext context) => CommentPopup(
+                                                comment: widget.comment,
+                                                name: exercise.data['name'],
+                                                t_id: widget.id,
+                                                setSubmitAllowed:(bool value){
+                                                  setState(() {
+                                                    widget.setSubmitAllowed(value);
+                                                  });
+                                                },
+                                              ),
                                             );
                                           },
                                           child: Container(
