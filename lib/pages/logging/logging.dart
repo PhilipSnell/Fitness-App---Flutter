@@ -8,6 +8,8 @@ import 'package:xcell/cards/group_card.dart';
 import 'package:xcell/cards/training_card.dart';
 import 'package:xcell/theme/style.dart';
 
+import '../../database/tracking_data.dart';
+
 class LoggingPage extends StatefulWidget {
   const LoggingPage({Key key}) : super(key: key);
 
@@ -18,6 +20,7 @@ class LoggingPage extends StatefulWidget {
 class _LoggingPageState extends State<LoggingPage> {
   List<dynamic> _groups = [];
   DateTime day = new DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  ValueNotifier<bool> _notifier = ValueNotifier(false);
 
   Future<Null> _getGroupData() async {
     var list = await getGroupData();
@@ -26,10 +29,12 @@ class _LoggingPageState extends State<LoggingPage> {
     });
   }
 
+
   @override
   void initState(){
     _groups = [];
     _getGroupData();
+
   }
 
   @override
@@ -77,6 +82,7 @@ class _LoggingPageState extends State<LoggingPage> {
           children: List.generate(_groups.length, (index) {
             return groupCard(
                 item: _groups[index],
+                completion: 1,
                 day: day,
                 index: index
             );

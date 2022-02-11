@@ -20,6 +20,7 @@ Color featureColor = Color(0xfff4eb49);
 Color topLeftDif = Color(0xff606060);
 Color botRightDif = Color(0xff444444);
 Color userMessage = Color(0xff444444);
+Color groupDivider = Color(0xff7a7a7a);
 
 // Text
 Color drawerText = Color(0xff232323);
@@ -35,6 +36,7 @@ Color hintMessage = Color(0xff717171);
 // Icons
 Color cardIcon = Color(0xffc0c0c0);
 Color cardAddIcon = Color(0xfff4eb49);
+Color completedLogging = Color(0xff539749);
 
 
 Size screenSize(BuildContext context) {
