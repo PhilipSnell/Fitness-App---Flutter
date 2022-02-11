@@ -66,11 +66,9 @@ class _TrainingCard1State extends State<TrainingCard1> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Expanded(
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                  shadowColor: featureColor,
+                                child: Container(
+                                  height: 90,
+                                  width: 90,
                                   color:  cardBack,
                                   child: InkWell(
                                     onTap: (){
@@ -79,16 +77,29 @@ class _TrainingCard1State extends State<TrainingCard1> {
                                         builder: (BuildContext context) => VideoPopup(url: exercise.data['video'], name: exercise.data['name']),
                                       );
                                     },
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                      child: Center(
-                                        child: new AspectRatio(
-                                          aspectRatio: 487 / 451,
-                                          child: new Container(
-                                            child: CachedNetworkImage(
-                                              imageUrl:  "${exercise.data["image"]}",
-                                              placeholder: (context, url) => new LoadingIndicator(),
-                                              errorWidget: (context, url, error) => new Icon(Icons.error),
+                                    child: Center(
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(15.0),
+                                        child: Container(
+                                          height: 90,
+                                          width: 90,
+                                          child: Center(
+
+                                            child: ClipRect(
+                                              child: Align(
+                                                widthFactor: 1,
+                                                child: OverflowBox(
+                                                  maxWidth: 180,
+                                                  child: CachedNetworkImage(
+                                                    imageUrl:  "${exercise.data["image"]}",
+                                                    placeholder: (context, url) => new LoadingIndicator(),
+                                                    errorWidget: (context, url, error) => new Icon(Icons.error),
+                                                    filterQuality: FilterQuality.high,
+                                                    width: 170,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),

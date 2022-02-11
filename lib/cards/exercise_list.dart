@@ -25,7 +25,7 @@ class _ExerciseListState extends State<ExerciseList> {
   List<dynamic> _exercises = [];
   // Get json result and convert it to model. Then add
   Future<Null> _getExercises() async {
-    await trainingApiProvider().getExerciseData();
+    // await trainingApiProvider().getExerciseData();
     var list = await db.queryAllRows();
 
     _exercises = list;

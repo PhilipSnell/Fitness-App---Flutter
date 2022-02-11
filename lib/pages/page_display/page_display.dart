@@ -76,7 +76,7 @@ class _PageState extends State<MyPage> {
         backgroundColor: background,
         title: Container(
           color: background,
-          child: _page == 1 ?Column(
+          child: _page == 0 ?Column(
             children: <Widget>[
               FutureBuilder<List<int>>(
                 future: _getPhase(),

@@ -36,7 +36,7 @@ final _tokenURL = Uri.parse(APIglobs.base + APIglobs.api + _tokenEndpoint);
 final _registerURL = Uri.parse(APIglobs.base + APIglobs.api + _register);
 
 final defaultImage = APIglobs.base + "/media/images/pullup_wbq2Kcf.png";
-  final utubeThumbnailBase = "https://i3.ytimg.com/vi/";
+  final utubeThumbnailBase = "https://img.youtube.com/vi/";
 
 // void sendMessage(types.TextMessage textMessage) async {
 //
@@ -134,6 +134,30 @@ class trainingApiProvider {
     print("deleting training db");
     await DatabaseHelper.deleteAll();
     for(final entry in json.decode(response.body)){
+      print(entry);
+      var exercise = entry['exercise'];
+      print(exercise);
+      if (exercise["image"] == null){
+        try {
+          int len =exercise["video"].toString().length;
+          String utubeID = exercise["video"].substring(len-11, len);
+          exercise["image"] = utubeThumbnailBase + utubeID + "/0.jpg";
+          print(exercise['image']);
+        }
+        catch(e){
+          exercise["image"] = defaultImage;
+        }
+      }
+      else{
+        exercise["image"] = APIglobs.base + exercise["image"];
+      }
+      Exercise exer = Exercise.fromJson(exercise);
+      Map<String, dynamic> entry2 = exer.toJson();
+      var result1 = await e_db.insert(entry2);
+      if(result1==null){
+        // print("Exercise already existed ... updating");
+        await e_db.update(entry2);
+      }
       TrainingEntry item = TrainingEntry.fromJson(entry);
       Map<String, dynamic> entry1 = item.toJson();
 
@@ -168,30 +192,20 @@ class trainingApiProvider {
     // await e_db.deleteAll();
     for(final entry in json.decode(response.body)){
       if (entry["image"] == null){
-
-
         try {
           int len =entry["video"].toString().length;
           String utubeID = entry["video"].substring(len-11, len);
-          entry["image"] = utubeThumbnailBase + utubeID + "/default.jpg";
-
+          entry["image"] = utubeThumbnailBase + utubeID + "/0.jpg";
         }
         catch(e){
           entry["image"] = defaultImage;
         }
-
       }
       else{
         entry["image"] = APIglobs.base + entry["image"];
       }
       Exercise exer = Exercise.fromJson(entry);
       Map<String, dynamic> entry2 = exer.toJson();
-
-      // print('inserting $entry2');
-      //int id = entry2["id"];
-      //await db.deleteAll();
-      //await ExerciseDatabase.deleteDB();
-
       var result1 = await e_db.insert(entry2);
       if(result1==null){
         // print("Exercise already existed ... updating");
