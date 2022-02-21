@@ -23,42 +23,18 @@ class LoginPage extends StatelessWidget {
       // appBar: AppBar(
       //   title: appLogo,
       // ),
-      body: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            title: TabBar(
-              tabs: [
-                Tab(text: "Sign In"),
-                Tab(text: "Sign up"),
-              ],
-            ),
-          ),
-          body: TabBarView(
-            children: [
-              BlocProvider(
-                create: (context) {
-                  return LoginBloc(
-                  authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-                  userRepository: userRepository,
-                  );
-                },
-                child: LoginForm(),
+      body:   BlocProvider(
+        create: (context) {
+          return LoginBloc(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            userRepository: userRepository,
+          );
+        },
+        child: LoginForm(),
 
-              ),
-              BlocProvider(
-                create: (context) {
-                  return SignupBloc(
-                    userRepository: userRepository,
-                  );
-                },
-                child: SignupForm(),
-
-              ),
-            ],
-          ),
-        ),
       ),
+
+
     );
   }
 }
