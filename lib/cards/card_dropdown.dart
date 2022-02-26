@@ -207,6 +207,26 @@ class _CardDropDownState extends State<CardDropDown> {
                     children: [
                       Visibility(
                         visible: listOfSets.data.length > 0 ? true : false,
+                        child: Slider(
+                          min: 0.0,
+                          max: 10.0,
+                          value: _value,
+                          divisions: 1,
+                          label: '${_value.round()}',
+                          onChanged: (value) {
+                            setState(() {
+                              _value = value;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Visibility(
+                        visible: listOfSets.data.length > 0 ? true : false,
                         child: IconButton(
                             icon: Icon(
                               Icons.remove,
@@ -234,109 +254,7 @@ class _CardDropDownState extends State<CardDropDown> {
                             }
                         ),
                       ),
-                      Visibility(
-                        visible: listOfSets.data.length > 0 ? true : false,
-                        child: listOfSets.data.length > 0
-                            ? InkWell(
-                            onTap: (){
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                    title: Text("Select Exercise Difficulty"),
-                                    content: Container(
-                                      height: 100,
-                                      child: Center(
-                                        child: DropdownButton<int>(
-                                          focusColor:Colors.white,
-                                          value: 1 <= listOfSets.data[0].difficulty && listOfSets.data[0].difficulty <=10
-                                          ? listOfSets.data[0].difficulty
-                                          : 1,
-                                          //elevation: 5,
-                                          style: TextStyle(color: Colors.white,),
-                                          iconEnabledColor:Colors.white,
-                                          items: <int>[
-                                            1,
-                                            2,
-                                            3,
-                                            4,
-                                            5,
-                                            6,
-                                            7,
-                                            8,
-                                            9,
-                                            10
-                                          ].map<DropdownMenuItem<int>>((int value) {
-                                            return DropdownMenuItem<int>(
-                                              value: value,
-                                              child: Text("$value",style:TextStyle(color:Colors.white),),
-                                            );
-                                          }).toList(),
-                                          hint:Text(
-                                            "#",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          onChanged: (int value) {
 
-                                            setState(() {
-                                              listOfSets.data[0].difficulty = value;
-                                              saveList(listOfSets.data);
-                                            });
-                                            // SetDifficulty(widget.t_id, value);
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              margin: EdgeInsets.fromLTRB(15, 0, 15, 2),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(5.0),
-                                child: Container(
-                                  height: 30,
-                                  width: 40,
-                                  child: Stack(
-                                      children:[
-                                        Container(
-                                            height: 30,
-                                            width: 40,
-                                            color: botRightDif,
-                                            child: Padding(
-                                              padding: const EdgeInsets.fromLTRB(0,11,3,0),
-                                              child: Text("10",
-                                              textAlign: TextAlign.right,
-                                              ),
-                                            ),
-                                        ),
-                                        ClipPath(
-                                          child: Container(
-                                            height: 30,
-                                            padding: const EdgeInsets.fromLTRB(3,3,0,0),
-                                            width: MediaQuery.of(context).size.width,
-                                            color: topLeftDif,
-                                            child: 1 <= listOfSets.data[0].difficulty && listOfSets.data[0].difficulty <=10
-                                                  ?Text("${listOfSets.data[0].difficulty}")
-                                                  :Text("#"),
-
-                                            // child: difficulty != null
-                                            //     ? Text("${difficulty}")
-                                            //     :Text("#"),
-                                          ),
-                                          clipper: CustomClipPath(),
-                                        )
-                                      ]
-                                  ),
-                                ),
-                              ),
-                            )
-                        )
-                        :Container(),
-                      ),
                       IconButton(
                           icon: Icon(
                             Icons.add,
