@@ -192,7 +192,63 @@ class _CardDropDownState extends State<CardDropDown> {
               return Column(
                 //mainAxisSize: MainAxisSize.min,
                 children: [
+                  Visibility(
+                    visible: listOfSets.data.length > 0 ? true : false,
 
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0,5,0,5),
+                      child: Row(
+
+                        children: [
+
+                          Container(
+
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 15, right: 25),
+                              child: Text(
+                                "Difficulty",
+                                style: TextStyle(
+                                  color: difficulty,
+
+                                ),
+                                textAlign: TextAlign.left
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 242,
+
+                            child: SliderTheme(
+                              data: SliderTheme.of(context).copyWith(
+                                trackHeight: 6,
+
+                                overlayShape: SliderComponentShape.noThumb,
+                                trackShape: CustomTrackShape(),
+                              ),
+                              child: Slider(
+
+                                min: 0,
+                                max: 10,
+                                value: listOfSets.data.length > 0
+                                    ? listOfSets.data[0].difficulty.toDouble()
+                                    : 0,
+                                divisions: 10,
+                                label: listOfSets.data.length > 0
+                                  ? '${listOfSets.data[0].difficulty.round()}'
+                                  : '${0}',
+                                onChanged: (value) {
+                                  setState(() {
+                                    listOfSets.data[0].difficulty = value.toInt();
+                                    saveList(listOfSets.data);
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
@@ -202,162 +258,86 @@ class _CardDropDownState extends State<CardDropDown> {
                         return TrainSet(listOfSets.data,index);
                       }
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Visibility(
-                        visible: listOfSets.data.length > 0 ? true : false,
-                        child: IconButton(
-                            icon: Icon(
-                              Icons.remove,
-                              color: cardAddIcon,
-                            ),
-                            padding: listOfSets.data.length > 0
-                                ? EdgeInsets.only(right: 15)
-                                : EdgeInsets.zero,
-                            constraints: BoxConstraints(),
-                            onPressed: () {
-                              // if ladder to avoid removal of last set if it has a comment
-                              if(listOfSets.data.length == 1){
-                                if(listOfSets.data[0].comment==null || listOfSets.data[0].comment.isNotEmpty){
-                                  comment_before_set = listOfSets.data[0].comment;
-                                  listOfSets.data.clear();
-                                }else{
-                                  listOfSets.data.removeLast();
-                                }
-                              }else{
-                                listOfSets.data.removeLast();
-                              }
 
-                              saveList(listOfSets.data);
-                              widget.setSubmitAllowed(true);
-                            }
-                        ),
-                      ),
-                      Visibility(
-                        visible: listOfSets.data.length > 0 ? true : false,
-                        child: listOfSets.data.length > 0
-                            ? InkWell(
-                            onTap: (){
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                    title: Text("Select Exercise Difficulty"),
-                                    content: Container(
-                                      height: 100,
-                                      child: Center(
-                                        child: DropdownButton<int>(
-                                          focusColor:Colors.white,
-                                          value: 1 <= listOfSets.data[0].difficulty && listOfSets.data[0].difficulty <=10
-                                          ? listOfSets.data[0].difficulty
-                                          : 1,
-                                          //elevation: 5,
-                                          style: TextStyle(color: Colors.white,),
-                                          iconEnabledColor:Colors.white,
-                                          items: <int>[
-                                            1,
-                                            2,
-                                            3,
-                                            4,
-                                            5,
-                                            6,
-                                            7,
-                                            8,
-                                            9,
-                                            10
-                                          ].map<DropdownMenuItem<int>>((int value) {
-                                            return DropdownMenuItem<int>(
-                                              value: value,
-                                              child: Text("$value",style:TextStyle(color:Colors.white),),
-                                            );
-                                          }).toList(),
-                                          hint:Text(
-                                            "#",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          onChanged: (int value) {
-
-                                            setState(() {
-                                              listOfSets.data[0].difficulty = value;
-                                              saveList(listOfSets.data);
-                                            });
-                                            // SetDifficulty(widget.t_id, value);
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                      ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Visibility(
+                          maintainSize: false,
+                          visible: listOfSets.data.length > 0 ? true : false,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right:100),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(17.5),
+                              child: Container(
+                                height: 35,
+                                width: 35,
+                                color: setButton,
+                                child: IconButton(
+                                    padding: EdgeInsets.fromLTRB(0,1,0,3),
+                                    icon: Icon(
+                                      Icons.remove,
+                                      color: cardAddIcon,
+                                      size: 30,
                                     ),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              margin: EdgeInsets.fromLTRB(15, 0, 15, 2),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(5.0),
-                                child: Container(
-                                  height: 30,
-                                  width: 40,
-                                  child: Stack(
-                                      children:[
-                                        Container(
-                                            height: 30,
-                                            width: 40,
-                                            color: botRightDif,
-                                            child: Padding(
-                                              padding: const EdgeInsets.fromLTRB(0,11,3,0),
-                                              child: Text("10",
-                                              textAlign: TextAlign.right,
-                                              ),
-                                            ),
-                                        ),
-                                        ClipPath(
-                                          child: Container(
-                                            height: 30,
-                                            padding: const EdgeInsets.fromLTRB(3,3,0,0),
-                                            width: MediaQuery.of(context).size.width,
-                                            color: topLeftDif,
-                                            child: 1 <= listOfSets.data[0].difficulty && listOfSets.data[0].difficulty <=10
-                                                  ?Text("${listOfSets.data[0].difficulty}")
-                                                  :Text("#"),
+                                    constraints: BoxConstraints(),
+                                    onPressed: () {
+                                      // if ladder to avoid removal of last set if it has a comment
+                                      if(listOfSets.data.length == 1){
+                                        if(listOfSets.data[0].comment==null || listOfSets.data[0].comment.isNotEmpty){
+                                          comment_before_set = listOfSets.data[0].comment;
+                                          listOfSets.data.clear();
+                                        }else{
+                                          listOfSets.data.removeLast();
+                                        }
+                                      }else{
+                                        listOfSets.data.removeLast();
+                                      }
 
-                                            // child: difficulty != null
-                                            //     ? Text("${difficulty}")
-                                            //     :Text("#"),
-                                          ),
-                                          clipper: CustomClipPath(),
-                                        )
-                                      ]
-                                  ),
+                                      saveList(listOfSets.data);
+                                      widget.setSubmitAllowed(true);
+                                    }
                                 ),
                               ),
-                            )
-                        )
-                        :Container(),
-                      ),
-                      IconButton(
-                          icon: Icon(
-                            Icons.add,
-                            color: cardAddIcon,
+                            ),
                           ),
-                          padding: listOfSets.data.length > 0 ? EdgeInsets.only(left: 15) : EdgeInsets.zero,
-                          constraints: BoxConstraints(),
-                          onPressed: () {
-                            getDefaults(listOfSets.data);
-                            if (comment_before_set != ""){
-                              listOfSets.data.add(TrainingSet(t_id: widget.t_id, sets: 1, reps: repsDefault, weights: weightDefault, difficulty: 0, comment: comment_before_set, e_id: widget.e_id));
-                              comment_before_set = "";
-                            }
-                            else{
-                              listOfSets.data.add(TrainingSet(t_id: widget.t_id, sets: 1, reps: repsDefault, weights: weightDefault, difficulty: 0, e_id: widget.e_id));
-                            }
-                            saveList(listOfSets.data);
-                            widget.setSubmitAllowed(true);
-                          }
-                      ),
-                    ],
+                        ),
+
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(17.5),
+                          child: Container(
+                            height: 35,
+                            width: 35,
+                            // margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                            color: setButton,
+                            child: IconButton(
+                                padding: EdgeInsets.fromLTRB(0,2,0,4),
+                                icon: Icon(
+                                  Icons.add,
+                                  color: cardAddIcon,
+                                  size: 30,
+                                ),
+                                // padding: listOfSets.data.length > 0 ? EdgeInsets.only(left: 15) : EdgeInsets.zero,
+                                constraints: BoxConstraints(),
+                                onPressed: () {
+                                  getDefaults(listOfSets.data);
+                                  if (comment_before_set != ""){
+                                    listOfSets.data.add(TrainingSet(t_id: widget.t_id, sets: 1, reps: repsDefault, weights: weightDefault, difficulty: 0, comment: comment_before_set, e_id: widget.e_id));
+                                    comment_before_set = "";
+                                  }
+                                  else{
+                                    listOfSets.data.add(TrainingSet(t_id: widget.t_id, sets: 1, reps: repsDefault, weights: weightDefault, difficulty: 0, e_id: widget.e_id));
+                                  }
+                                  saveList(listOfSets.data);
+                                  widget.setSubmitAllowed(true);
+                                }
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               );
@@ -514,6 +494,22 @@ class CustomClipPath extends CustomClipper<Path> {
   }
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+
+class CustomTrackShape extends RoundedRectSliderTrackShape {
+  Rect getPreferredRect({
+    @required RenderBox parentBox,
+    Offset offset = Offset.zero,
+    @required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+  }) {
+    final double trackHeight = sliderTheme.trackHeight;
+    final double trackLeft = offset.dx;
+    final double trackTop = offset.dy + (parentBox.size.height - trackHeight) / 2;
+    final double trackWidth = parentBox.size.width;
+    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
+  }
 }
 
 

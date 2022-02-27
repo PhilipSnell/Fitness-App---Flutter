@@ -21,6 +21,7 @@ Color topLeftDif = Color(0xff606060);
 Color botRightDif = Color(0xff444444);
 Color userMessage = Color(0xff444444);
 Color groupDivider = Color(0xff7a7a7a);
+Color setButton = Color(0xff5e5e5e);
 
 // Text
 Color drawerText = Color(0xff232323);
@@ -32,6 +33,7 @@ Color dayTextNotSelected = Color(0xff444444);
 Color dayTextSelected = Color(0xfff4eb49);
 Color cardFeatureText = Color(0xfff4eb49);
 Color hintMessage = Color(0xff717171);
+Color difficulty = Color(0xffc6c6c6);
 
 // Icons
 Color cardIcon = Color(0xffc0c0c0);
