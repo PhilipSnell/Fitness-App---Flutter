@@ -81,25 +81,12 @@ class _TrainingPage1State extends State<TrainingPage1> {
   Future<Null> _queryTainingAPI() async{
     await trainingApiProvider().getTrainingData();
     var list = await t_db.queryAllRows();
-    for(final entry in list){
-      print(entry);
-    }
     setState(() {
       _trainingEntrys = list;
     });
     onDayChanged();
   }
-  // Future<Null> _getTrainingEntrys() async {
-  //   // await trainingApiProvider().getTrainingData();
-  //   var list = await t_db.queryAllRows();
-  //   for(final entry in list){
-  //     print(entry);
-  //   }
-  //   setState(() {
-  //     _trainingEntrys = list;
-  //   });
-  //   onDayChanged();
-  // }
+
   Future<void> _pullRefresh() async{
     _queryTainingAPI();
   }

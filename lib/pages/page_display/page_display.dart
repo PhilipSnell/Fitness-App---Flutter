@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:xcell/api_connection/api_connection.dart';
 import 'package:xcell/bloc/authentication_bloc.dart';
 import 'package:xcell/database/training_database.dart';
-import 'package:xcell/pages/exercises/exercise_page.dart';
-import 'package:xcell/pages/home/home_page.dart';
 import 'package:xcell/pages/logging/logging.dart';
-import 'package:xcell/pages/report/report_page.dart';
 import 'package:xcell/pages/training/training_page1.dart';
 import 'package:xcell/repository/user_repository.dart';
-import 'package:xcell/pages/settings/settings_page.dart';
-import 'package:xcell/pages/training/training_page.dart';
 import 'package:xcell/theme/style.dart';
+
+import '../linked_accounts/linked_accounts.dart';
 
 
 class MyPage extends StatefulWidget {
@@ -35,7 +31,7 @@ class _PageState extends State<MyPage> {
     // "Home",
     "Training",
     "Logging",
-
+    "Linked Accounts"
     // "Exercises",
     // "Report",
     // "Settings",
@@ -52,6 +48,10 @@ class _PageState extends State<MyPage> {
     {
       "icon": Icons.fact_check_outlined,
       "name": "Logging",
+    },
+    {
+      "icon": MaterialCommunityIcons.link_variant,
+      "name": "Linked Accounts",
     },
 
     // {
@@ -247,7 +247,7 @@ class _PageState extends State<MyPage> {
           children: <Widget>[
             TrainingPage1(),
             LoggingPage(),
-
+            LinkedAccountPage(),
             // TrainPage(),
 
             // exercisePage(),

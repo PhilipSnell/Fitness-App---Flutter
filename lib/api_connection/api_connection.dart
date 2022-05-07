@@ -20,6 +20,7 @@ class APIglobs {
 }
 final _set = "/sets/";
 final _email = "/data/";
+final _check = "/checkupdates/";
 final _exer = "/exercise/";
 final _chat = "/loadmessages/";
 final _send = "/messages/";
@@ -31,6 +32,7 @@ final _chatURL = Uri.parse(APIglobs.base + APIglobs.api + _chat);
 final _setURL = Uri.parse(APIglobs.base + APIglobs.api + _set);
 final _sendMessageURL = Uri.parse(APIglobs.base + APIglobs.api + _send);
 final _emailURL = Uri.parse(APIglobs.base + APIglobs.api + _email);
+final _checkURL = Uri.parse(APIglobs.base + APIglobs.api + _check);
 final _exerURL = Uri.parse(APIglobs.base + APIglobs.api + _exer);
 final _tokenURL = Uri.parse(APIglobs.base + APIglobs.api + _tokenEndpoint);
 final _registerURL = Uri.parse(APIglobs.base + APIglobs.api + _register);
@@ -124,6 +126,15 @@ class trainingApiProvider {
     request["username"] = email;
     String post = json.encode(request);
     // print(post);
+    final http.Response checkUpdate = await http.post(
+      _checkURL,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: post,
+    );
+    print(json.decode(checkUpdate.body)['update']);
+    if (!json.decode(checkUpdate.body)['update']) return;
     final http.Response response = await http.post(
       _emailURL,
       headers: <String, String>{
@@ -131,6 +142,7 @@ class trainingApiProvider {
       },
       body: post,
     );
+
     print("deleting training db");
     await DatabaseHelper.deleteAll();
     for(final entry in json.decode(response.body)){
