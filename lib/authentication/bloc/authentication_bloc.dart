@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:xcell/repository/user_repository.dart';
-import 'package:xcell/model/user_model.dart';
+import 'package:xcell/models/user_model.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
@@ -15,17 +15,17 @@ class AuthenticationBloc
   final UserRepository userRepository;
 
   AuthenticationBloc({@required this.userRepository})
-      : assert(UserRepository != null), super();
+      : assert(UserRepository != null),
+        super();
 
   @override
   AuthenticationState get initialState => AuthenticationUnintialized();
 
   @override
   Stream<AuthenticationState> mapEventToState(
-      AuthenticationEvent event,
-      ) async* {
+    AuthenticationEvent event,
+  ) async* {
     if (event is AppStarted) {
-
       final bool hasToken = await userRepository.hasToken();
 
       if (hasToken) {
@@ -38,9 +38,7 @@ class AuthenticationBloc
     if (event is LoggedIn) {
       yield AuthenticationLoading();
 
-      await userRepository.persistToken(
-          user: event.user
-      );
+      await userRepository.persistToken(user: event.user);
       yield AuthenticationAuthenticated();
     }
 

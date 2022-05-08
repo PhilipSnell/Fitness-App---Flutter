@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:xcell/pages/page_display/page_display.dart';
+import 'package:xcell/authentication/bloc/authentication_bloc.dart';
+import 'package:xcell/authentication/login/login_page.dart';
+import 'package:xcell/common_widgets/loading_indicator.dart';
+import 'package:xcell/pages/main_nav/page_display.dart';
 import 'package:xcell/pages/splash/splash_page.dart';
 import 'package:xcell/repository/user_repository.dart';
-import 'package:xcell/bloc/authentication_bloc.dart';
-import 'package:xcell/login/login_page.dart';
-import 'package:xcell/pages/home/home.dart';
-import 'package:xcell/common/common.dart';
 import 'package:xcell/theme/style.dart';
 
 import 'theme/colors.dart';
@@ -59,14 +57,14 @@ class App extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         brightness: Brightness.dark,
-        primarySwatch: MyYellow,
-        accentColor: featureColor,
         focusColor: featureColor,
         fontFamily: 'Roboto',
         scaffoldBackgroundColor: background,
         textSelectionTheme: TextSelectionThemeData(
           selectionHandleColor: Color(0x232323), //Set to see through
         ),
+        colorScheme: ColorScheme.fromSwatch(primarySwatch: MyYellow)
+            .copyWith(secondary: featureColor),
         // textSelectionHandleColor: Colors.green,
       ),
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(

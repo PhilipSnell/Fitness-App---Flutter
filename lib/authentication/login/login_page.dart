@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:xcell/login/sbloc/signup_bloc.dart';
-import 'package:xcell/login/sign_up_form.dart';
+import 'package:xcell/authentication/bloc/authentication_bloc.dart';
+import 'package:xcell/authentication/login/bloc/login_bloc.dart';
+import 'package:xcell/authentication/login/login_form.dart';
 import 'package:xcell/repository/user_repository.dart';
-
-import 'package:xcell/bloc/authentication_bloc.dart';
-import 'package:xcell/login/bloc/login_bloc.dart';
-import 'package:xcell/login/login_form.dart';
-import 'package:xcell/theme/style.dart';
 
 class LoginPage extends StatelessWidget {
   final UserRepository userRepository;
@@ -23,7 +18,7 @@ class LoginPage extends StatelessWidget {
       // appBar: AppBar(
       //   title: appLogo,
       // ),
-      body:   BlocProvider(
+      body: BlocProvider(
         create: (context) {
           return LoginBloc(
             authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
@@ -31,10 +26,7 @@ class LoginPage extends StatelessWidget {
           );
         },
         child: LoginForm(),
-
       ),
-
-
     );
   }
 }

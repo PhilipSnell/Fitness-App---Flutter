@@ -1,5 +1,5 @@
 import 'package:xcell/database/user_database.dart';
-import 'package:xcell/model/user_model.dart';
+import 'package:xcell/models/user_model.dart';
 
 class UserDao {
   final dbProvider = DatabaseProvider.dbProvider;

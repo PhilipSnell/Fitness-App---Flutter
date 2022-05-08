@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:xcell/database/exercise_database.dart';
 import 'package:xcell/database/set_database.dart';
 import 'package:xcell/database/training_database.dart';
-import 'package:xcell/model/api_model.dart';
+import 'package:xcell/models/api_model.dart';
 import 'package:xcell/models/exercise.dart';
 import 'package:xcell/models/group.dart';
 import 'package:xcell/models/training_set.dart';

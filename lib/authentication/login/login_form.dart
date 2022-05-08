@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:xcell/bloc/authentication_bloc.dart';
-import 'package:xcell/login/bloc/login_bloc.dart';
+import 'package:xcell/authentication/login/bloc/login_bloc.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -19,7 +18,6 @@ class _LoginFormState extends State<LoginForm> {
         email: _emailController.text,
         password: _passwordController.text,
       ));
-
     }
 
     return BlocListener<LoginBloc, LoginState>(
@@ -27,8 +25,8 @@ class _LoginFormState extends State<LoginForm> {
         if (state is LoginFailure) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
-                'Incorrect email or password',
-                  textAlign: TextAlign.center,
+              'Incorrect email or password',
+              textAlign: TextAlign.center,
             ),
             backgroundColor: Colors.red,
           ));
@@ -37,25 +35,26 @@ class _LoginFormState extends State<LoginForm> {
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
           return Container(
-
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(40.0,40,40,0) ,
+                  padding: EdgeInsets.fromLTRB(40.0, 40, 40, 0),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("Sign In",
-                    style: TextStyle(
-                      fontSize: 24,
+                    child: Text(
+                      "Sign In",
+                      style: TextStyle(
+                        fontSize: 24,
                       ),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(40.0,10,0,0) ,
+                  padding: EdgeInsets.fromLTRB(40.0, 10, 0, 0),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("Hi there! Nice to see you again!",
+                    child: Text(
+                      "Hi there! Nice to see you again!",
                       style: TextStyle(
                         color: Colors.white54,
                         fontSize: 14,
@@ -77,8 +76,8 @@ class _LoginFormState extends State<LoginForm> {
                         ),
                         TextFormField(
                           decoration: InputDecoration(
-                              labelText: 'Password', icon: Icon(Icons.security),
-
+                            labelText: 'Password',
+                            icon: Icon(Icons.security),
                           ),
                           controller: _passwordController,
                           obscureText: true,

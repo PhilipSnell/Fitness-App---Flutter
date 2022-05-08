@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:xcell/api_connection/set_feedback.dart';
 import 'package:xcell/database/set_database.dart';
+import 'package:xcell/models/text_message.dart';
+import 'package:xcell/pages/chat/chat.dart';
 import 'package:xcell/theme/style.dart';
 
-import '../chat/chat.dart';
-import '../models/text_message.dart';
-
 class CommentPopup extends StatefulWidget {
-
   final String name;
   final String comment;
   final int t_id;
   final Function(bool) setSubmitAllowed;
 
-  const CommentPopup({
-    Key key,
-    this.comment,
-    this.name,
-    this.t_id,
-    this.setSubmitAllowed
-  }) : super(key: key);
+  const CommentPopup(
+      {Key key, this.comment, this.name, this.t_id, this.setSubmitAllowed})
+      : super(key: key);
 
   @override
   _CommentPopupState createState() => _CommentPopupState();
@@ -35,28 +29,27 @@ class _CommentPopupState extends State<CommentPopup> {
     final feedback = TextMessage(
       author_id: 0,
       message: message.message,
-
     );
     _addMessage(feedback);
     String combinedFeedback = "";
-    for (final message in _messages){
+    for (final message in _messages) {
       if (message.author_id == 0) {
-        combinedFeedback = message.toJson()['message']+", "+combinedFeedback;
+        combinedFeedback =
+            message.toJson()['message'] + ", " + combinedFeedback;
       }
-
     }
-    combinedFeedback=combinedFeedback.substring(0, combinedFeedback.length - 2);
-    if (setsHasData){
+    combinedFeedback =
+        combinedFeedback.substring(0, combinedFeedback.length - 2);
+    if (setsHasData) {
       set_db.updateComment(widget.t_id, combinedFeedback);
-    }
-    else{
+    } else {
       row = {
         't_id': widget.t_id,
         'sets': -1,
         'reps': "-1",
         'weights': "-1",
         'difficulty': 0,
-        'comment':combinedFeedback,
+        'comment': combinedFeedback,
         'e_id': 0,
       };
       set_db.insert(row);
@@ -66,31 +59,32 @@ class _CommentPopupState extends State<CommentPopup> {
 
   void _addMessage(TextMessage message) {
     setState(() {
-      _messages.insert(_messages.length,message);
+      _messages.insert(_messages.length, message);
     });
   }
+
   Future<String> _getCurrentFeedback() async {
     List setFeedback = await getSetFeedback(widget.t_id);
     return setFeedback[0];
   }
-  Future<void> _useCurrentFeedback() async{
+
+  Future<void> _useCurrentFeedback() async {
     var sets = await set_db.queryID(widget.t_id);
     var combinedFeedback;
-    if (sets.length > 0){
+    if (sets.length > 0) {
       setsHasData = true;
       combinedFeedback = sets[0].comment;
-      if (combinedFeedback == '###' || combinedFeedback == null){
+      if (combinedFeedback == '###' || combinedFeedback == null) {
         combinedFeedback = "";
       }
-    }
-    else{
+    } else {
       setsHasData = false;
       combinedFeedback = "";
     }
     print(combinedFeedback);
     var splitFeedback = combinedFeedback.split(', ');
     // print("split: $splitFeedback");
-    for (final feedback in splitFeedback){
+    for (final feedback in splitFeedback) {
       if (feedback != "dif" && feedback != "") {
         final feedbackMessage = TextMessage(
           author_id: 0,
@@ -100,10 +94,11 @@ class _CommentPopupState extends State<CommentPopup> {
       }
     }
     setState(() {
-      _messages=_messages.reversed.toList();
+      _messages = _messages.reversed.toList();
     });
   }
-  void _initialiseComment(){
+
+  void _initialiseComment() {
     print(widget.comment);
     if (widget.comment != "") {
       final commentMessage = TextMessage(
@@ -116,7 +111,6 @@ class _CommentPopupState extends State<CommentPopup> {
       });
     }
     _useCurrentFeedback();
-
   }
 
   @override
@@ -127,30 +121,27 @@ class _CommentPopupState extends State<CommentPopup> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return AlertDialog(
       backgroundColor: cardBack,
-      insetPadding: EdgeInsets.fromLTRB(0,150,0,50),
+      insetPadding: EdgeInsets.fromLTRB(0, 150, 0, 50),
       title: Padding(
-        padding: EdgeInsets.fromLTRB(0,5,0,5),
+        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10.0),
           child: Container(
             color: background,
             padding: EdgeInsets.all(5),
             // height:31,
-            child:Center(
-              child: Text("${widget.name}",
-                  textAlign: TextAlign.center,
+            child: Center(
+              child: Text(
+                "${widget.name}",
+                textAlign: TextAlign.center,
                 style: TextStyle(),
               ),
             ),
           ),
         ),
       ),
-
-
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -163,8 +154,8 @@ class _CommentPopupState extends State<CommentPopup> {
               // heightFactor: 0.1,
               // widthFactor: 0.8,
               child: Chat(
-                  messages: _messages,
-                  onSendPressed: _handleSendPressed,
+                messages: _messages,
+                onSendPressed: _handleSendPressed,
               ),
             ),
           ),
@@ -172,5 +163,4 @@ class _CommentPopupState extends State<CommentPopup> {
       ),
     );
   }
-
 }

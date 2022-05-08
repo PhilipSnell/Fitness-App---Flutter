@@ -1,18 +1,9 @@
-import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:xcell/api_connection/set_feedback.dart';
-import 'package:xcell/common/common.dart';
 import 'package:xcell/database/exercise_database.dart';
 import 'package:xcell/database/set_database.dart';
-import 'package:xcell/database/training_database.dart';
 import 'package:xcell/models/training_set.dart';
-import 'package:xcell/pages/training/training_page.dart';
 import 'package:xcell/theme/style.dart';
-import 'package:xcell/popups/video_popup.dart';
-import 'package:numberpicker/numberpicker.dart';
 
 class CardDropDown extends StatefulWidget {
   final String reps;
