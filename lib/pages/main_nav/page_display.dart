@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:xcell/authentication/bloc/authentication_bloc.dart';
 import 'package:xcell/database/training_database.dart';
+import 'package:xcell/pages/linked_accounts/myfitnesspal/status_bloc/mfp_status_bloc.dart';
 import 'package:xcell/pages/logging/logging.dart';
 import 'package:xcell/pages/training/training_page.dart';
 import 'package:xcell/repository/user_repository.dart';
@@ -11,6 +12,7 @@ import 'package:xcell/theme/style.dart';
 import '../linked_accounts/linked_accounts.dart';
 
 class MyPage extends StatefulWidget {
+  const MyPage({Key key}) : super(key: key);
   @override
   _PageState createState() => _PageState();
 }
