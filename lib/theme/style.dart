@@ -9,7 +9,7 @@ Image appLogo = new Image(
     );
 
 // Background
-Color background = Color(0xff444444);
+Color background = Color(0xFF444444);
 Color groupItemInput = Color(0xff444444);
 Color cardBack = Color(0xff606060);
 Color cardDropDown = Color(0xff7a7a7a);
@@ -22,6 +22,7 @@ Color botRightDif = Color(0xff444444);
 Color userMessage = Color(0xff444444);
 Color groupDivider = Color(0xff7a7a7a);
 Color setButton = Color(0xff5e5e5e);
+Color linkedAccountBackground = Color(0xff606060);
 
 // Text
 Color drawerText = Color(0xff232323);

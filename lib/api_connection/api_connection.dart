@@ -18,6 +18,7 @@ class APIglobs {
   static var api = "/api";
   static var base = "https://xcellfitness.herokuapp.com";
 }
+
 final _set = "/sets/";
 final _email = "/data/";
 final _check = "/checkupdates/";
@@ -27,6 +28,7 @@ final _send = "/messages/";
 final _tokenEndpoint = "/api-token-auth/";
 final _register = "/register/";
 final _group = "/groups/";
+
 final Uri _groupURL = Uri.parse(APIglobs.base + APIglobs.api + _group);
 final _chatURL = Uri.parse(APIglobs.base + APIglobs.api + _chat);
 final _setURL = Uri.parse(APIglobs.base + APIglobs.api + _set);
@@ -38,7 +40,7 @@ final _tokenURL = Uri.parse(APIglobs.base + APIglobs.api + _tokenEndpoint);
 final _registerURL = Uri.parse(APIglobs.base + APIglobs.api + _register);
 
 final defaultImage = APIglobs.base + "/media/images/pullup_wbq2Kcf.png";
-  final utubeThumbnailBase = "https://img.youtube.com/vi/";
+final utubeThumbnailBase = "https://img.youtube.com/vi/";
 
 // void sendMessage(types.TextMessage textMessage) async {
 //
@@ -110,16 +112,13 @@ final defaultImage = APIglobs.base + "/media/images/pullup_wbq2Kcf.png";
 // }
 //
 
-
-
 class trainingApiProvider {
   final db = DatabaseHelper.instance;
   final e_db = ExerciseDatabase.instance;
   void getTrainingData() async {
-
     // print(_emailURL);
     String email = await UserRepository().getUsername();
-    email = email.replaceAll(' ','');
+    email = email.replaceAll(' ', '');
     var request = {};
     // print("---------------------------------------");
     // print(email);
@@ -145,28 +144,26 @@ class trainingApiProvider {
 
     print("deleting training db");
     await DatabaseHelper.deleteAll();
-    for(final entry in json.decode(response.body)){
+    for (final entry in json.decode(response.body)) {
       print(entry);
       var exercise = entry['exercise'];
       print(exercise);
-      if (exercise["image"] == null){
+      if (exercise["image"] == null) {
         try {
-          int len =exercise["video"].toString().length;
-          String utubeID = exercise["video"].substring(len-11, len);
+          int len = exercise["video"].toString().length;
+          String utubeID = exercise["video"].substring(len - 11, len);
           exercise["image"] = utubeThumbnailBase + utubeID + "/0.jpg";
           print(exercise['image']);
-        }
-        catch(e){
+        } catch (e) {
           exercise["image"] = defaultImage;
         }
-      }
-      else{
+      } else {
         exercise["image"] = APIglobs.base + exercise["image"];
       }
       Exercise exer = Exercise.fromJson(exercise);
       Map<String, dynamic> entry2 = exer.toJson();
       var result1 = await e_db.insert(entry2);
-      if(result1==null){
+      if (result1 == null) {
         // print("Exercise already existed ... updating");
         await e_db.update(entry2);
       }
@@ -176,16 +173,15 @@ class trainingApiProvider {
       print('inserting $entry1');
 
       var result = await db.insert(entry1);
-      if(result==null){
+      if (result == null) {
         print("Entry already existed");
-      }
-      else{
+      } else {
         print("Successfully added $entry1");
       }
     }
   }
-  void getExerciseData() async {
 
+  void getExerciseData() async {
     // print(_exerURL);
     String email = await UserRepository().getUsername();
     var request = {};
@@ -202,28 +198,25 @@ class trainingApiProvider {
       body: post,
     );
     // await e_db.deleteAll();
-    for(final entry in json.decode(response.body)){
-      if (entry["image"] == null){
+    for (final entry in json.decode(response.body)) {
+      if (entry["image"] == null) {
         try {
-          int len =entry["video"].toString().length;
-          String utubeID = entry["video"].substring(len-11, len);
+          int len = entry["video"].toString().length;
+          String utubeID = entry["video"].substring(len - 11, len);
           entry["image"] = utubeThumbnailBase + utubeID + "/0.jpg";
-        }
-        catch(e){
+        } catch (e) {
           entry["image"] = defaultImage;
         }
-      }
-      else{
+      } else {
         entry["image"] = APIglobs.base + entry["image"];
       }
       Exercise exer = Exercise.fromJson(entry);
       Map<String, dynamic> entry2 = exer.toJson();
       var result1 = await e_db.insert(entry2);
-      if(result1==null){
+      if (result1 == null) {
         // print("Exercise already existed ... updating");
         await e_db.update(entry2);
-      }
-      else{
+      } else {
         // print("Successfully added $entry2");
       }
     }
@@ -235,20 +228,19 @@ Future<bool> syncSetData() async {
   // sends all set data - need to reduce it to only send specific day data
   List<Map<String, dynamic>> setData = await set_db.queryAllRows();
   List<Map<String, dynamic>> postData = [];
-  for (final item in setData){
-
+  for (final item in setData) {
     TrainingSet set = TrainingSet.fromJson(item);
-    if (set.comment == null){
+    if (set.comment == null) {
       set.comment = '';
     }
-    if (set.sets == -1){
+    if (set.sets == -1) {
       set.reps = "-1";
       set.weights = "-1";
     }
     postData.add(set.toJson());
   }
   //print("set Data: $setData");
-    print("post Data: ${json.encode(postData)}");
+  print("post Data: ${json.encode(postData)}");
   final http.Response response = await http.post(
     _setURL,
     headers: <String, String>{
@@ -292,10 +284,9 @@ Future<bool> createUser(UserSignup userSignup) async {
   );
   if (response.statusCode == 200) {
     Map<String, Object> data = json.decode(response.body);
-    if (data.containsKey("response")){
+    if (data.containsKey("response")) {
       return true;
-    }
-    else{
+    } else {
       // print(data);
       throw Exception(data);
     }
