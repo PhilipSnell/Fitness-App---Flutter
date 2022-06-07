@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:xcell/pages/page_display/page_display.dart';
+import 'package:xcell/authentication/bloc/authentication_bloc.dart';
+import 'package:xcell/authentication/login/login_page.dart';
+import 'package:xcell/common_widgets/loading_indicator.dart';
+// import 'package:xcell/pages/linked_accounts/myfitnesspal/bloc/mfp_bloc.dart';
+import 'package:xcell/pages/linked_accounts/myfitnesspal/mfp_api.dart';
+import 'package:xcell/pages/main_nav/page_display.dart';
 import 'package:xcell/pages/splash/splash_page.dart';
 import 'package:xcell/repository/user_repository.dart';
-import 'package:xcell/bloc/authentication_bloc.dart';
-import 'package:xcell/login/login_page.dart';
-import 'package:xcell/pages/home/home.dart';
-import 'package:xcell/common/common.dart';
 import 'package:xcell/theme/style.dart';
 
+import 'pages/linked_accounts/myfitnesspal/status_bloc/mfp_status_bloc.dart';
 import 'theme/colors.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
@@ -23,7 +24,7 @@ class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
-    print (transition);
+    print(transition);
   }
 
   @override
@@ -36,17 +37,26 @@ void main() {
   initializeDateFormatting('fr_FR', null);
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final userRepository = UserRepository();
+  final mfpApi = MfpApi();
 
-  runApp(
+  runApp(MultiBlocProvider(
+    providers: [
       BlocProvider<AuthenticationBloc>(
         create: (context) {
-          return AuthenticationBloc(
-              userRepository: userRepository
-          )..add(AppStarted());
+          return AuthenticationBloc(userRepository: userRepository)
+            ..add(AppStarted());
         },
-        child: App(userRepository: userRepository),
+      ),
+      BlocProvider<MfpStatusBloc>(
+        create: (context) {
+          return MfpStatusBloc(mfpApi: mfpApi)..add(MfpAppStarted());
+        },
       )
-  );
+    ],
+    child: App(
+      userRepository: userRepository,
+    ),
+  ));
 }
 
 class App extends StatelessWidget {
@@ -55,7 +65,7 @@ class App extends StatelessWidget {
   App({Key key, @required this.userRepository}) : super(key: key);
 
   @override
-  Widget build (BuildContext context) {
+  Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
         brightness: Brightness.dark,
@@ -70,7 +80,6 @@ class App extends StatelessWidget {
         // textSelectionHandleColor: Colors.green,
       ),
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-
         builder: (context, state) {
           if (state is AuthenticationUnintialized) {
             return SplashPage();
@@ -79,14 +88,17 @@ class App extends StatelessWidget {
             return MyPage();
           }
           if (state is AuthenticationUnauthenticated) {
-            return LoginPage(userRepository: userRepository,);
+            return LoginPage(
+              userRepository: userRepository,
+            );
           }
           if (state is AuthenticationLoading) {
             return LoadingIndicator();
-          }
-          else return LoginPage(userRepository: userRepository,);
+          } else
+            return LoginPage(
+              userRepository: userRepository,
+            );
         },
-
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:xcell/model/user_model.dart';
+import 'package:xcell/models/user_model.dart';
 import 'package:meta/meta.dart';
-import 'package:xcell/model/api_model.dart';
+import 'package:xcell/models/api_model.dart';
 import 'package:xcell/api_connection/api_connection.dart';
 import 'package:xcell/dao/user_dao.dart';
 

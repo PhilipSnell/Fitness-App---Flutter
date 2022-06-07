@@ -3,9 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xcell/api_connection/TrackingData.dart';
-import "package:xcell/bloc/authentication_bloc.dart";
-import 'package:xcell/cards/group_card.dart';
-import 'package:xcell/cards/training_card.dart';
+import 'package:xcell/pages/logging/group_card.dart';
 import 'package:xcell/theme/style.dart';
 
 import '../../database/tracking_data.dart';
