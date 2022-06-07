@@ -16,15 +16,8 @@ class LinkedAccountPage extends StatefulWidget {
 }
 
 class _LinkedAccountPageState extends State<LinkedAccountPage> {
-  List<dynamic> _groups = [];
-  DateTime day = new DateTime(
-      DateTime.now().year, DateTime.now().month, DateTime.now().day);
-  ValueNotifier<bool> _notifier = ValueNotifier(false);
-
   @override
   Widget build(BuildContext context) {
-    final title = 'Grid List';
-
     return Scaffold(
       body: Column(
         children: [
